@@ -118,37 +118,33 @@ app.post('/logout',function(req,res){
 });
 
 
-
-app.post('/register',function(req,res)
-{
-            if(req.session.u==null&&req.body.u!=null&&req.body.p!=null)
-    {
-         pool.connect(function(err,client,done)
-            {
-                     if(err)
-                     {
-                    return console.error("db connect err",err);
-                     }
-                     client.query("SELECT * FROM users WHERE username=$1",[xss(req.body.u)],function(err,result){ 
-                                   if(result.rows[0]!=null)
-                                   {
-                                      ret(req,res,"exist");
-                                   }
-                                   else
-                                   {
-                                  client.query("INSERT INTO users(username,password)",[xss(req.body.u),xss(req.body.p)],function(err,result){
-            if(err)
-            { 
-               return console.error("db insert err",err);
+app.post('/register', function (req, res) {
+    if (req.session.u == null && req.body.u != null && req.body.p != null) {
+        pool.connect(function (err, client, done) {
+            if (err) {
+                ret(req,res,"error");
+                return console.error("db connect err", err);
             }
-            res.writeHead(200,{'Content-Type':'text/html'});
-            res.write('ok');
-            res.end();
-         });
-                                   }  
-                                               })
-                                 
-             });   
-         
+            client.query("SELECT * FROM users WHERE username=$1", [xss(req.body.u)], function (err, result) {
+                if (result.rows[0] != null) {
+                    ret(req, res, "exist");
+                }
+                else {
+                    client.query("INSERT INTO users(username,password)", [xss(req.body.u), xss(req.body.p)], function (err, result) {
+                        if (err) {
+                            res.writeHead(200,{'Content-Type':'text/html'});
+                            res.write('ok');
+                            res.end();
+                            return console.error("db insert err", err);
+                        }
+                        res.writeHead(200, { 'Content-Type': 'text/html' });
+                        res.write('ok');
+                        res.end();
+                    });
+                }
+            })
+
+        });
+
     }
 });
