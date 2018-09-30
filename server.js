@@ -80,12 +80,18 @@ app.post('/login',function(req,res){
 	if(req.session.u==null&&req.body.u!=null&&req.body.p!=null){
 		pool.connect(function(err, client, done){
 			if(err){
+<<<<<<< HEAD
+=======
                 ret(req,res,"error");
+>>>>>>> a5098ae0d49be40773f66a4e4a0e224074d5470a
 				return console.error("db connnet err",err);
 			}
 			client.query("SELECT * FROM users WHERE username=$1",[xss(req.body.u)],function(err,result){
 				if(err){
+<<<<<<< HEAD
+=======
                     ret(req,res,"error");
+>>>>>>> a5098ae0d49be40773f66a4e4a0e224074d5470a
 					return console.error("db query err",err);
 				}
 				if(result.rows[0]==null){
@@ -112,6 +118,8 @@ app.post('/login',function(req,res){
 	}
 		
 });
+<<<<<<< HEAD
+=======
 
 
 app.post('/passwd',function(req,res){
@@ -156,12 +164,30 @@ app.post('/passwd',function(req,res){
     }
 })
 
+>>>>>>> a5098ae0d49be40773f66a4e4a0e224074d5470a
 app.post('/logout',function(req,res){
 	req.session.u=null;
 	res.writeHead(200, {'Content-Type': 'text/html'});	
     res.write('ok');		
     res.end();
 });
+<<<<<<< HEAD
+/*
+app.post('/register',function(req,res){
+	if(req.session.u==null&&req.body.u!=null&&req.body.p!=null){
+			pool.connect(function(err, client, done){
+			if(err){
+				return console.error("db connnet err",err);
+			}
+			client.query("SELECT * FROM users WHERE username=$1",[xss(req.body.u)],function(err,result){
+				if(result.rows[0]!=null){
+					ret(req,res,"exist");
+				}else{
+					client.query("INSERT INTO users (username,password)",[xss(req.body.u),],function(err,result){
+					
+	*/				
+		
+=======
 
 
 app.post('/register', function (req, res) {
@@ -194,4 +220,5 @@ app.post('/register', function (req, res) {
     }
 });
 
+>>>>>>> a5098ae0d49be40773f66a4e4a0e224074d5470a
 

@@ -1,7 +1,11 @@
-var express=require("express");
-var app=express();
 var fs=require('fs');
-
+var url=require('url');
+var express=require('express');
+var session=require('express-session');
+var app=express();
+var bodyParser=require("body-parser"); 
+var mime = require("./mime").types;
+var path = require("path");
 app.get('/files/*', function(req, res) {   
 var pathname = url.parse(req.url).pathname;
    console.log("Request for " + pathname + " received.");
@@ -25,12 +29,15 @@ res.end();
 }
 });
 });
-app.get('/', function (req, res) {
-   res.send("<html><head><title>TEST</title></head><body><h1>TEST</h1></body></html>");
-}) 
+app.get('/', function(req, res) {   
+console.log("Request for  / received.");
+res.writeHead(302, {
+ 'Location': '/files/login.html'
+});
+res.end();
+});
 var server = app.listen(8081, function () {
   var host = server.address().address
   var port = server.address().port
-  console.log("ADDR:http://%s:%s", host, port) 
-})
-
+  console.log("8081");
+});

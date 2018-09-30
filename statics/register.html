@@ -1,0 +1,125 @@
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>注册</title>
+<script src="./files/js/jquery-2.1.4.min.js"></script>
+<link rel="stylesheet" href="./files/css/bootstrap.min.css">
+<script src="./files/js/bootstrap.min.js"></script>
+
+    <style>  
+		    body {
+      background: url(./background.jpg) no-repeat center center fixed;
+      background-size: cover;
+	background-attachment: fixed;  
+    }
+    .strb {  
+position: absolute;
+top: 50%;
+-webkit-transform: translateY(-50%);
+-moz-transform:  translateY(-50%);
+-ms-transform:  translateY(-50%);
+-o-transform:  translateY(-50%);
+transform:  translateY(-50%);
+filter:alpha(Opacity=85);-moz-opacity:0.85;opacity: 0.85;
+    }  
+    </style>  
+</head>
+<script>
+	function checkstr(Str)
+    {
+      //var Str=;
+      var str1="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      var i=0;
+      for (i=0; i<Str.length;i++) {
+         var onechar=Str.substring(i,i+1);
+         if (!(str1.indexOf(onechar)!= -1)){
+               return false;
+            }
+       }
+}
+function reg(){
+$("#warn").html("");
+$("#ud").removeClass("has-error");
+$("#pd").removeClass("has-error");
+$("#cd").removeClass("has-error");
+var check=0;
+if($("#password").val()==""){
+$("#warn").append('<div class="alert alert-danger" role="alert">密码不能为空!</div>');
+check+=1;
+$("#pd").addClass("has-error");
+}
+if($("#user").val()==""){
+$("#warn").append('<div class="alert alert-danger" role="alert">用户名不能为空!</div>');
+check+=1;
+$("#ud").addClass("has-error");
+}
+if(checkstr($("#password").val())==false){
+$("#warn").append('<div class="alert alert-danger" role="alert">密码只能包含大小写字母以及阿拉伯数字!</div>');
+check+=1;
+$("#pd").addClass("has-error");
+}
+if(checkstr($("#user").val())==false){
+$("#warn").append('<div class="alert alert-danger" role="alert">用户名只能包含大小写字母以及阿拉伯数字!</div>');
+check+=1;
+$("#ud").addClass("has-error");
+}
+if($("#password").val()!=$("#passwordcon").val()){
+	$("#warn").append('<div class="alert alert-danger" role="alert">确认密码应与密码一致!</div>');
+check+=1;
+$("#cd").addClass("has-error");
+}
+if($("#password").val().length<6){
+	$("#warn").append('<div class="alert alert-danger" role="alert">密码应在六位以上!</div>');
+check+=1;
+$("#pd").addClass("has-error");
+}
+if(check==0){
+$.post('/register',{u:$("#user").val(),p:$("#password").val()},function(data){
+	if(data=="exsist"){
+		$("#warn").append('<div class="alert alert-danger" role="alert">用户名已存在!</div>');
+	$("#ud").addClass("has-error");
+	}
+	if(data=="error"){
+		$("#warn").append('<div class="alert alert-danger" role="alert">服务器检验错误!请检查输入是否有非法字符!</div>');
+	}
+	if(data=="success"){
+		 $("#warn").append('<div class="alert alert-success" role="alert">注册成功!</div>');
+			window.location.href="/";
+	}
+});
+
+
+}
+}
+
+</script>
+
+<body>
+
+		<div class="panel panel-default col-lg-4 col-lg-offset-4  col-sm-6 col-sm-offset-3 col-xs-8 col-xs-offset-2 strb">
+			<div class="penel-heading">
+				<h3>注册</h3>
+			</div>
+			<div class="panel-body">
+				<div>
+					<div class="form-group" id="ud">
+						<label for="user">用户名</label>
+						<input type="text" class="form-control" id="user" placeholder="User Name">
+					</div>
+					<div class="form-group" id="pd">
+						<label for="password">密码</label>
+						<input type="password" class="form-control" id="password" placeholder="Password">
+					</div>
+					<div class="form-group" id="cd">
+						<label for="password">确认密码(重复输入一次密码以确保无误)</label>
+						<input type="password" class="form-control" id="passwordcon" placeholder="Password Confirm">
+					</div>
+					<button class="btn btn-primary" onclick="reg()">注册</button>
+				</div>
+				<br>
+				<div id="warn"></div>
+			</div>
+			</div>
+
+	</body>
+</html>

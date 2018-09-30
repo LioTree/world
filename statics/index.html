@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="/files/js/jquery-2.1.4.min.js"></script>
+<link rel="stylesheet" href="/files/css/bootstrap.min.css">
+<script src="/files/js/bootstrap.min.js"></script>
+    <style>  
+    .strb {  
+    }  
+    .table th, .table td { 
+text-align: center;
+vertical-align: middle!important;
+}
+    </style>  
+    <script>
+			function tr(oid,ol){
+		for(var i=0;i<ol.length;i++){
+			if(oid==ol[i].id){
+				return ol[i].name;
+			}
+		}
+		return null;
+	}
+		function loadmap(){
+				for(var i=0;i<8;i++){
+					$("#map").append("<tr id='t"+i+"'></tr>");
+				for(var j=0;j<8;j++){
+					$("#t"+i).append("<td id='h"+j+"-"+i+"'></td>");
+				} 
+				}
+			}
+			function  drawmap(){
+			$.get("/gapi",{"op":"lf"},function(data){
+				$.get("/gapi",{"op":"lo"},function(dataa){
+				data=JSON.parse(data);
+				dataa=JSON.parse(dataa);
+				for(var i=0;i<data.length;i++){
+					console.log("set"+"#h"+data[i].x+"-"+data[i].y);
+					
+					var cal;
+					switch(data[i].type){
+					case "pingyuan":
+					cal="green";
+					data[i].type="平原";
+					break;
+					case "shandi":
+					cal="brown";
+					data[i].type="山地";
+					break;
+					case "gaoyuan":
+					cal="gray";
+					data[i].type="高原";
+					break;
+					case "haiyang":
+					cal="blue";
+					data[i].type="海洋";
+					break;
+					case "shamo":
+					cal="yellow";
+					data[i].type="沙漠";
+					break;
+					default:
+					cal="white";
+					data[i].type="未知";
+					break;
+					}
+					if(data[i].org==null) data[i].orgname="无主地";
+					else data[i].orgname="<b>"+tr(data[i].org,dataa)+"</b>";
+					$("#h"+data[i].x+"-"+data[i].y).html(data[i].orgname+"<br>"+data[i].type+"<br>人口:"+data[i].popu);
+					$("#h"+data[i].x+"-"+data[i].y).css("background-color",cal);
+				}
+			});
+			});
+		
+		}
+		
+		
+		
+    function loadname(){
+		$.get("/myname",{},function(data){
+			$.get("/gapi",{"op":"gn"},function(dataa){
+
+
+					if(dataa!="err"){
+					dataa=JSON.parse(dataa);
+				$("#h").html(dataa+"    "+data);
+			}else{
+			window.location.href="./newplayer.html";
+			}
+		});
+	});
+	}
+	function load(){
+	loadmap();
+	drawmap();
+		loadname();
+
+	}
+	function logout(){
+		$.post("/logout",function(data){
+				window.location.href="/";
+		});
+	}
+		window.onload=load;
+    </script>
+</head>
+<body >
+
+<nav class="navbar navbar-default ">
+  <div class="container-fluid">
+    <div class="navbar-header  col-xs-4 col-sm-4">
+      <a class="navbar-brand" href="/">
+        <img alt="SOC " src="...">
+      </a>
+    </div>
+    <div class=" col-xs-6 col-sm-6  text-center navbar-inner"></div>
+    			<div class=" col-xs-2 col-sm-2 text-center navbar-inner"><a class="navbar-link" href="./me.html" id="h"></a> <button class="btn btn-default navbar-btn " onclick="logout()">登出</button></div>
+    			
+  </div>
+</nav>
+	<div><br></div>
+<div class="col-lg-8 col-lg-offset-2  col-sm-10 col-sm-offset-1 col-xs-12 strb">
+	<div class="panel panel-default ">
+		<div class="panel-heading" >
+			<h3>地图</h3>
+</div>
+		  <div class="panel-body">
+			  
+			  
+			  <table class="table table-bordered" id="map" style="word-wrap:break-word;word-break:break-all;">
+			  </table>
+   
+  </div>
+	</div>
+	</div>
+
+</body>
+</html>
