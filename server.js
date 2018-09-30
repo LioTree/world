@@ -140,7 +140,7 @@ app.post('/passwd',function(req,res){
                             ret(req,res,"error");
                             return console.error("db update err",err);
                         }
-                        
+                        ret(req,res,"ok");
                     });
                 }
                 else{
