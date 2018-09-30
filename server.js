@@ -191,7 +191,6 @@ app.post('/register', function (req, res) {
             })
 
         });
-
     }
 });
 
