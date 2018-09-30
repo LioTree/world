@@ -80,10 +80,18 @@ app.post('/login',function(req,res){
 	if(req.session.u==null&&req.body.u!=null&&req.body.p!=null){
 		pool.connect(function(err, client, done){
 			if(err){
+<<<<<<< HEAD
+=======
+                ret(req,res,"error");
+>>>>>>> a5098ae0d49be40773f66a4e4a0e224074d5470a
 				return console.error("db connnet err",err);
 			}
 			client.query("SELECT * FROM users WHERE username=$1",[xss(req.body.u)],function(err,result){
 				if(err){
+<<<<<<< HEAD
+=======
+                    ret(req,res,"error");
+>>>>>>> a5098ae0d49be40773f66a4e4a0e224074d5470a
 					return console.error("db query err",err);
 				}
 				if(result.rows[0]==null){
@@ -110,12 +118,60 @@ app.post('/login',function(req,res){
 	}
 		
 });
+<<<<<<< HEAD
+=======
+
+
+app.post('/passwd',function(req,res){
+    if(req.session.u!=null&&req.body.u!=null&&req.body.p!=null&&req.body.u==req.session.u&&req.body.np!=null)
+    {
+        pool.connect(function(err,client,done){
+            if(err){
+                ret(req,res,'error');
+                return console.error("db connnet err",err);
+            }
+            client.query("SELECT * FROM users WHERE username=$1",[xss(req.body.u)],function(err,result)
+            {
+                if(err)
+                {
+                    ret(req,res,"error");
+                    return console.error("db query err",err);
+                }
+                if(result.rows[0]==null){
+					res.writeHead(200, {'Content-Type': 'text/html'});	
+         			res.write('nouser');		
+                      res.end();
+                }
+                else if(md5(req.body.p)==result.rows[0].password){
+                    client.query("UPDATE users SET password=$1 where username=$2",[md5(req.body.np),xss(req.body.u)],fucntion(err,result){
+                        if(err){
+                            ret(req,res,"error");
+                            return console.error("db update err",err);
+                        }
+                        ret(req,res,"ok");
+                    });
+                }
+                else{
+                    res.writeHead(200, {'Content-Type': 'text/html'});	
+         			res.write('pwerr');		
+      				res.end();
+                }
+            });
+        });
+    }
+    else{
+        ret(req,res,"cpwerr");
+    }
+})
+
+>>>>>>> a5098ae0d49be40773f66a4e4a0e224074d5470a
 app.post('/logout',function(req,res){
 	req.session.u=null;
 	res.writeHead(200, {'Content-Type': 'text/html'});	
     res.write('ok');		
     res.end();
 });
+<<<<<<< HEAD
 /*
 app.post('/register',function(req,res){
 	if(req.session.u==null&&req.body.u!=null&&req.body.p!=null){
@@ -131,4 +187,39 @@ app.post('/register',function(req,res){
 					
 	*/				
 		
+=======
+
+
+app.post('/register', function (req, res) {
+    if (req.session.u == null && req.body.u != null && req.body.p != null) {
+        pool.connect(function (err, client, done) {
+            if (err) {
+                ret(req, res, "error");
+                return console.error("db connect err", err);
+            }
+            client.query("SELECT * FROM users WHERE username=$1", [xss(req.body.u)], function (err, result) {
+                if (result.rows[0] != null) {
+                    ret(req, res, "exist");
+                }
+                else {
+                    client.query("INSERT INTO users(username,password)", [xss(req.body.u), xss(req.body.p)], function (err, result) {
+                        if (err) {
+                            res.writeHead(200, { 'Content-Type': 'text/html' });
+                            res.write('error');
+                            res.end();
+                            return console.error("db insert err", err);
+                        }
+                        res.writeHead(200, { 'Content-Type': 'text/html' });
+                        res.write('ok');
+                        res.end();
+                    });
+                }
+            })
+
+        });
+
+    }
+});
+
+>>>>>>> a5098ae0d49be40773f66a4e4a0e224074d5470a
 
