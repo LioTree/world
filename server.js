@@ -85,6 +85,7 @@ app.post('/login',function(req,res){
 			}
 			client.query("SELECT * FROM users WHERE username=$1",[xss(req.body.u)],function(err,result){
 				if(err){
+                    ret(req,res,"error");
 					return console.error("db query err",err);
 				}
 				if(result.rows[0]==null){
