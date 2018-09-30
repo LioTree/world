@@ -10,6 +10,22 @@ var pg = require('pg');
 var auth=require("./auth.json");
 var session = require('express-session');
 var RedisStore = require('connect-redis')(session);
+var xss=require('xss');
+var crypto=require('crypto')
+
+function ret(req,res,str){
+   res.writeHead(200, {'Content-Type': 'text/html'});	
+   res.write(str);		
+   res.end();
+}
+var md;
+var salt=auth.salt
+
+function md5(a){
+md=crypto.createHash("md5");
+md.update(salt+a);
+return md.digest("hex");
+}
 app.use(session({
     store: new RedisStore(),
     secret: auth.sessionsecret
@@ -66,7 +82,7 @@ app.post('/login',function(req,res){
 			if(err){
 				return console.error("db connnet err",err);
 			}
-			client.query("SELECT * FROM users WHERE username=$1",[req.body.u],function(err,result){
+			client.query("SELECT * FROM users WHERE username=$1",[xss(req.body.u)],function(err,result){
 				if(err){
 					return console.error("db query err",err);
 				}
@@ -74,7 +90,7 @@ app.post('/login',function(req,res){
 					res.writeHead(200, {'Content-Type': 'text/html'});	
          			res.write('nouser');		
       				res.end();
-				}else if(req.body.p==result.rows[0].password){
+				}else if(md5(req.body.p)==result.rows[0].password){
 					req.session.u=req.body.u;
 					req.session.user={'username':req.body.u};
          			res.writeHead(200, {'Content-Type': 'text/html'});	
@@ -94,7 +110,25 @@ app.post('/login',function(req,res){
 	}
 		
 });
-				
-
-
+app.post('/logout',function(req,res){
+	req.session.u=null;
+	res.writeHead(200, {'Content-Type': 'text/html'});	
+    res.write('ok');		
+    res.end();
+});
+/*
+app.post('/register',function(req,res){
+	if(req.session.u==null&&req.body.u!=null&&req.body.p!=null){
+			pool.connect(function(err, client, done){
+			if(err){
+				return console.error("db connnet err",err);
+			}
+			client.query("SELECT * FROM users WHERE username=$1",[xss(req.body.u)],function(err,result){
+				if(result.rows[0]!=null){
+					ret(req,res,"exist");
+				}else{
+					client.query("INSERT INTO users (username,password)",[xss(req.body.u),],function(err,result){
+					
+	*/				
+		
 
