@@ -25,7 +25,7 @@ pool.connect(function(err, client, done) {
 				nick VARCHAR(128),\
 				email VARCHAR(256),\
 				register_time BIGINT,\
-				register_ip VARCHAR(32),\
+				register_ip VARCHAR(46),\
 				last_login_time BIGINT,\
 				phone VARCHAR(20),\
 				moto TEXT,\
