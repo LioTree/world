@@ -24,12 +24,12 @@ nd=new Date();
 nd.setTime(p.time);
 return '<div class="panel panel-default">\
 <div class="panel-heading">\
-<p><strong>标题：'+p.title+'</strong><small>作者:'+p.author+'</small><small class="pull-right">'+nd.toLocaleString()+'</small></p>\
+<p><strong>标题：'+p.title+'</strong><small  class="pull-right">作者:'+p.author+'</small></p>\
 </div>\
 <div class="panel-body"><p>'+p.content+'</p>\
 </div>\
 <div class="panel-footer">\
-<p>地点:'+p.pos+' 经度:'+p.lon+' 纬度:'+p.lat+'</p>\
+<p>地点:'+p.pos+' 经度:'+p.lon+' 纬度:'+p.lat+'<small class="pull-right">'+nd.toLocaleString()+'</small></p>\
 </div>\
 </div>\
 '
