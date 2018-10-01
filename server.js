@@ -212,6 +212,8 @@ app.post('/register', function (req, res) {
 app.get('/info',function(req,res){
 	ret(res,JSON.stringify({"username":req.session.u}));
 });
+
+
 app.get('/posts',function(req,res){
 	if(req.session.u!=null){
 		pool.connect(function (err,client,done) {
@@ -229,5 +231,6 @@ app.get('/posts',function(req,res){
 		});
 	}else{
 	ret(res,"NotLogined");
-	}
+}
+	
 });
