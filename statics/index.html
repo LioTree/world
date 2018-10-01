@@ -9,7 +9,7 @@
 window.onload=ol();
 function ln(){
 $.get('/info',function(data){
-$('#h').append(JSON.parse(data).username);
+$('#h').html(JSON.parse(data).username);
 if(JSON.parse(data).username==null){
 window.location.href="/login.html";
 }
@@ -20,9 +20,11 @@ ln();
 po();
 }
 function posts(p){
+nd=new Date();
+nd.setTime(p.time);
 return '<div class="panel panel-default">\
 <div class="panel-heading">\
-<p><strong>标题：'+p.title+'</strong><small>作者:'+p.author+'</small><small class="pull-right">'+(new Date()).setTime(p.time).toLocaleString()+'</small></p>\
+<p><strong>标题：'+p.title+'</strong><small>作者:'+p.author+'</small><small class="pull-right">'+nd.toLocaleString()+'</small></p>\
 </div>\
 <div class="panel-body"><p>'+p.content+'</p>\
 </div>\
@@ -41,6 +43,21 @@ $.get("/posts",function(data){
 JSON.parse(data).forEach(function(e){
 $("#ps").append(posts(e));
 });
+});
+}
+function post(){
+$.post("/post",{
+lon:$("#lon").val(),
+lat:$("#lat").val(),
+title:$("#title").val(),
+content:$("#content").val(),
+pos:$("#pos").val(),
+alt:$("#alt").val()
+},function(data){
+if(data==ok){
+$("#ps").html("");
+po();
+}
 });
 }
 </script>
@@ -82,10 +99,10 @@ $("#ps").append(posts(e));
 <div class="form-group">
 <label for="title"class="control-label">标题:</label><input type="text" class="form-control" id="title">
 </div>
-<label for="title"class="control-label">正文:</label>
+<label for="content"class="control-label">正文:</label>
 <textarea class="form-control" rows="4" id="content"></textarea>
 <br>
-<button class="btn btn-primary" type="submit">提交</button>
+<button class="btn btn-primary" onclick="post()">提交</button>
 
 </div>
 

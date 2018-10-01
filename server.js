@@ -208,7 +208,6 @@ app.post('/register', function (req, res) {
 	ret(res,"logined");
 	}
 });
-
 app.get('/info',function(req,res){
 	ret(res,JSON.stringify({"username":req.session.u}));
 });
@@ -222,6 +221,26 @@ app.get('/posts',function(req,res){
                 return console.error("db connect err", err);
             }
             client.query("SELECT title,content,author,pos,lon,lat,alt,time FROM posts WHERE status='display' ORDER BY time DESC LIMIT 20;", function (err, result) {
+				if (err) {
+                	ret(res, "error");
+                	return console.error("db connect err", err);
+            	}
+				ret(res,JSON.stringify(result.rows));
+			});
+		});
+	}else{
+	ret(res,"NotLogined");
+	}
+});
+
+app.post('/post',function(req,res){
+	if(req.session.u!=null){
+		pool.connect(function (err,client,done) {
+            if (err) {
+                ret(res, "error");
+                return console.error("db connect err", err);
+            }
+            client.query("INSERT INTO posts (title,content,author,pos,lon,lat,alt,time,status) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)",[xss(req.body.title),xss(req.body.content),xss(req.session.u),xss(req.body.pos),req.body.lon,req.body.lat,req.body.alt,Date.now(),"display"], function (err, result) {
 				if (err) {
                 	ret(res, "error");
                 	return console.error("db connect err", err);
