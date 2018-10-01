@@ -21,6 +21,13 @@ function ret(res,str){
 var md;
 var salt=auth.salt;
 
+function getip(req) {
+    return req.headers['x-forwarded-for'] ||
+        req.connection.remoteAddress ||
+        req.socket.remoteAddress ||
+        req.connection.socket.remoteAddress || '';
+};
+
 function md5(a){
 md=crypto.createHash("md5");
 md.update(salt+a);
@@ -176,7 +183,7 @@ app.post('/register', function (req, res) {
                     ret(res,"exist");
                 }
                 else {
-                    client.query("INSERT INTO users (username,password,register_time) values ($1,$2,$3);", [xss(req.body.u),md5(req.body.p),Date.now()], function (err, result) {
+                    client.query("INSERT INTO users (username,password,register_time,register_ip) values ($1,$2,$3,$4);", [xss(req.body.u),md5(req.body.p),Date.now(),getip(req)], function (err, result) {
                         if (err) {
                             res.writeHead(200, { 'Content-Type': 'text/html' });
                             res.write('error');
