@@ -11,7 +11,7 @@ var auth=require("./auth.json");
 var session = require('express-session');
 var RedisStore = require('connect-redis')(session);
 var xss=require('xss');
-var crypto=require('crypto')
+var crypto=require('crypto');
 
 function ret(req,res,str){
    res.writeHead(200, {'Content-Type': 'text/html'});	
@@ -19,7 +19,7 @@ function ret(req,res,str){
    res.end();
 }
 var md;
-var salt=auth.salt
+var salt=auth.salt;
 
 function md5(a){
 md=crypto.createHash("md5");
@@ -63,6 +63,7 @@ res.end();
 }
 });
 });
+
 app.get('/', function(req, res) {   
 console.log("Request for  / received.");
 res.writeHead(302, {
@@ -152,13 +153,17 @@ app.post('/passwd',function(req,res){
     else{
         ret(req,res,"cpwerr");
     }
-})
+});
+
+
 app.post('/logout',function(req,res){
 	req.session.u=null;
 	res.writeHead(200, {'Content-Type': 'text/html'});	
     res.write('ok');		
     res.end();
 });
+
+
 app.post('/register', function (req, res) {
     if (req.session.u == null && req.body.u != null && req.body.p != null) {
         pool.connect(function (err, client, done) {
@@ -188,6 +193,7 @@ app.post('/register', function (req, res) {
         });
     }
 });
+
 app.get('/info',function(req,res){
 	ret(req,res,JSON.stringify({"username":req.session.u}));
 });
