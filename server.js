@@ -176,7 +176,7 @@ app.post('/register', function (req, res) {
                     ret(req, res, "exist");
                 }
                 else {
-                    client.query("INSERT INTO users(username,password)", [xss(req.body.u), xss(req.body.p)], function (err, result) {
+                    client.query("INSERT INTO users (username,password) VALUES($1,$2)", [xss(req.body.u), xss(req.body.p)], function (err, result) {
                         if (err) {
                             res.writeHead(200, { 'Content-Type': 'text/html' });
                             res.write('error');
