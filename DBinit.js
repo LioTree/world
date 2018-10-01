@@ -24,9 +24,9 @@ pool.connect(function(err, client, done) {
 				username VARCHAR(128),\
 				nick VARCHAR(128),\
 				email VARCHAR(256),\
-				register_time TIMESTAMP,\
+				register_time BIGINT,\
 				register_ip INT,\
-				last_login_time TIMESTAMP,\
+				last_login_time BIGINT,\
 				phone VARCHAR(20),\
 				moto TEXT,\
 				type JSON,\
