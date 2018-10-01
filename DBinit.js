@@ -41,7 +41,7 @@ pool.connect(function(err, client, done) {
 	if(result.rows!=null)
     console.log(result.rows[0].out);
   });
-  client.query('DROP TABLE IF EXISTS posts;\n\
+  client.query("DROP TABLE IF EXISTS posts;\n\
   CREATE TABLE posts(\
   title TEXT,\
   content TEXT,\
@@ -51,7 +51,9 @@ pool.connect(function(err, client, done) {
   lat INT,\
   alt INT,\
   pos TEXT,\
-  t_ip VARCHAR(64));',function(err,results){
+  t_ip VARCHAR(64),\
+  status VARCHAR(10));\
+  INSERT INTO posts (title,content,author,time,lon,lat,alt,pos,t_ip,status) VALUES ('到此一游','哈哈哈哈','admin',1538404667887,132,28,0,'新华中学','127.0.0.1','display');INSERT INTO posts (title,content,author,time,lon,lat,alt,pos,t_ip,status) VALUES ('到此一游','哈哈哈哈','admin',1538404667887,132,28,0,'新华中学','127.0.0.1','display');",function(err,results){
     if(err){
       done();
       return console.error('queryerr',err);
