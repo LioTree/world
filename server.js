@@ -40,7 +40,7 @@ var config = {
     idleTimeoutMillis:3000,
 }
 var pool = new pg.Pool(config);
-app.get('/*', function(req, res) {   
+app.get('/*\.*', function(req, res) {   
 var pathname = url.parse(req.url).pathname;
    console.log("Request for " + pathname + " received.");
    fs.readFile("./statics/"+pathname.substr(1), function (err, data) {
@@ -66,7 +66,7 @@ res.end();
 app.get('/', function(req, res) {   
 console.log("Request for  / received.");
 res.writeHead(302, {
- 'Location': '/statics/login.html'
+ 'Location': '/login.html'
 });
 res.end();
 });
@@ -85,7 +85,7 @@ app.post('/login',function(req,res){
 			}
 			client.query("SELECT * FROM users WHERE username=$1",[xss(req.body.u)],function(err,result){
 				if(err){
-                    			ret(req,res,"error");
+                    ret(req,res,"error");
 					return console.error("db query err",err);
 				}
 				if(result.rows[0]==null){
@@ -133,7 +133,7 @@ app.post('/passwd',function(req,res){
                       res.end();
                 }
                 else if(md5(req.body.p)==result.rows[0].password){
-                    client.query("UPDATE users SET password=$1 where username=$2",[md5(req.body.np),xss(req.body.u)],fucntion(err,result){
+                    client.query("UPDATE users SET password=$1 where username=$2",[md5(req.body.np),xss(req.body.u)],function(err,result){
                         if(err){
                             ret(req,res,"error");
                             return console.error("db update err",err);
@@ -187,4 +187,7 @@ app.post('/register', function (req, res) {
 
         });
     }
-
+});
+app.get('/info',function(req,res){
+	ret(req,res,JSON.stringify({"username":req.session.u}));
+});
