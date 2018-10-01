@@ -74,7 +74,7 @@ res.end();
 app.get('/', function(req, res) {   
 console.log("Request for  / received.");
 res.writeHead(302, {
- 'Location': '/login.html'
+ 'Location': '/index.html'
 });
 res.end();
 });
