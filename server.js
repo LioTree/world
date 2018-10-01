@@ -40,7 +40,7 @@ var config = {
     idleTimeoutMillis:3000,
 }
 var pool = new pg.Pool(config);
-app.get('/*', function(req, res) {   
+app.get('/*\.*', function(req, res) {   
 var pathname = url.parse(req.url).pathname;
    console.log("Request for " + pathname + " received.");
    fs.readFile("./statics/"+pathname.substr(1), function (err, data) {
@@ -67,7 +67,7 @@ res.end();
 app.get('/', function(req, res) {   
 console.log("Request for  / received.");
 res.writeHead(302, {
- 'Location': '/statics/login.html'
+ 'Location': '/login.html'
 });
 res.end();
 });
@@ -86,7 +86,7 @@ app.post('/login',function(req,res){
 			}
 			client.query("SELECT * FROM users WHERE username=$1",[xss(req.body.u)],function(err,result){
 				if(err){
-                    			ret(req,res,"error");
+                    ret(req,res,"error");
 					return console.error("db query err",err);
 				}
 				if(result.rows[0]==null){
@@ -193,3 +193,9 @@ app.post('/register', function (req, res) {
         });
     }
 });
+<<<<<<< HEAD
+=======
+app.get('/info',function(req,res){
+	ret(req,res,JSON.stringify({"username":req.session.u}));
+});
+>>>>>>> a3f6ef879e3f78aa304d7eacee87907a075adae1
