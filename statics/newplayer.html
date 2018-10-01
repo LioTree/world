@@ -1,0 +1,162 @@
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>加入</title>
+<script src="/files/js/jquery-2.1.4.min.js"></script>
+<link rel="stylesheet" href="/files/css/bootstrap.min.css">
+<script src="/files/js/bootstrap.min.js"></script>
+
+    <style>  
+		    body {
+      background: url(/files/background.jpg) no-repeat center center fixed;
+      background-size: cover;
+	background-attachment: fixed;  
+    }
+    .tm{  
+filter:alpha(Opacity=85);-moz-opacity:0.85;opacity: 0.3;
+    }  
+    </style>  
+</head>
+<script>
+	function tr(oid,ol){
+		for(var i=0;i<ol.length;i++){
+			if(oid==ol[i].id){
+				return ol[i].name;
+			}
+		}
+		return null;
+	}
+	var fs;
+	var os;
+	window.onload=function(){
+		$("#b2").prop('disabled', true);
+		$("#d2").addClass("tm");
+		$.get("/gapi",{"op":"gn"},function(data){
+			var nick=JSON.parse(data);
+			if(nick!=null){
+		$("#b1").prop('disabled', true);
+		$("#b2").prop('disabled', false);
+		$("#d2").removeClass("tm");
+		$("#d1").addClass("tm");
+			}
+		});
+		
+		$.get("/gapi",{"op":"lf"},function(data){
+			$.get("/gapi",{"op":"lo"},function(dataa){
+		 fs=JSON.parse(data);
+		 os=JSON.parse(dataa);
+			var  pd;
+			for(var i=0;i<fs.length;i++){
+					switch(fs[i].type){
+					case "pingyuan":
+					fs[i].type="平原";
+					break;
+					case "shandi":
+					fs[i].type="山地";
+					break;
+					case "gaoyuan":
+					fs[i].type="高原";
+					break;
+					case "haiyang":
+					fs[i].type="海洋";
+					break;
+					case "shamo":
+					fs[i].type="沙漠";
+					break;
+					default:
+					fs[i].type="未知";
+					break;
+					}
+					var pd="";
+					if(fs[i].org==null){
+					pd='disabled="true"';
+				}
+					if(fs[i].org==null) fs[i].orgname="--";
+					else fs[i].orgname="<b>"+tr(fs[i].org,os)+"</b>";
+				
+				
+		$("#tb").append("<tr><td>"+fs[i].x+"-"+fs[i].y+"</td><td>"+fs[i].type+"</td><td>"+fs[i].popu+"</td><td>"+fs[i].ore+"</td><td>"+fs[i].ene+"</td><td>"+fs[i].tran+"</td><td>"+fs[i].orgname+"</td><td><input name='fsele' type='radio' value='"+i+"'"+pd+"/></td></tr>");
+	}
+		
+	});
+		});
+		
+}; 
+
+function nick(){
+$("#warn").html("");
+var check=0;
+if($("#nick").val()==""){
+$("#warn").append('<div class="alert alert-danger" role="alert">昵称不能为空!</div>');
+check+=1;
+}
+if(check==0){
+$.post('/papi',{"op":"np","nick":$("#nick").val()},function(data){
+	if(data=="err") $("#warn").append('<div class="alert alert-danger" role="alert">服务器检验错误!请检查输入是否有非法字符!</div>');
+	if(data=="ok"){
+		 $("#warn").append('<div class="alert alert-success" role="alert">成功!</div>');
+			//window.location.href="/";
+					$("#b1").prop('disabled', true);
+		$("#b2").prop('disabled', false);
+		$("#d2").removeClass("tm");
+		$("#d1").addClass("tm");
+	}
+});
+
+
+}
+}
+function sf(){
+	$("#warn2").html("");
+	var fi=($('input').filter(':checked').val());
+	if(fi!=null){
+	$.post("/papi",{"op":"jf","fx":fs[fi].x,"fy":fs[fi].y},function(data){
+			if(data=="err") $("#warn2").append('<div class="alert alert-danger" role="alert">服务器检验错误!请检查输入是否有非法字符!</div>');
+	if(data=="ok"){
+		 $("#warn2").append('<div class="alert alert-success" role="alert">成功!</div>');
+			window.location.href="/";
+		}
+	});
+}else{
+	$("#warn2").append('<div class="alert alert-danger" role="alert">您还未选择！</div>');
+}
+}
+</script>
+
+<body>
+<div><br><br></div>
+
+		<div class="panel panel-default col-lg-8 col-lg-offset-2  col-sm-10 col-sm-offset-1 col-xs-12 col-xs-offset-0" id="d1">
+			<div class="penel-heading">
+				<h3>Step 1  <small>设置昵称</small></h3>
+			</div>
+			<div class="panel-body">
+				<div>
+					<div class="form-group">
+						<label for="user">昵称</label>
+						<input type="text" class="form-control" id="nick" placeholder="Nick Name">
+					</div>
+					<button class="btn btn-primary" onclick="nick()" id="b1">确定</button>
+				</div>
+				<br><br>
+				<div id="warn"></div>
+			</div>
+			</div>
+					<div class="panel panel-disabled col-lg-8 col-lg-offset-2  col-sm-10 col-sm-offset-1 col-xs-12 col-xs-offset-0" id="d2" >
+			<div class="penel-heading">
+				<h3>Step 2  <small>选择住地</small></h3>
+			</div>
+			<div class="panel-body">
+				<div>
+					<table id="tb" class="table table-bordered">
+					<tr><th>位置</th><th>类型</th><th>人口</th><th>矿产</th><th>能源</th><th>地形</th><th>所属</th><th>选择</th></tr>
+					</table>
+</div>
+					<button class="btn btn-primary" onclick="sf()" id="b2">确定</button>
+				<br><br>
+				<div id="warn2"></div>
+			</div>
+			</div>
+
+	</body>
+</html>

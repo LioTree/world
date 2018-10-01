@@ -9,6 +9,11 @@ var config = {
     idleTimeoutMillis:3000,
 }
 var pool = new pg.Pool(config);
+crypto=require("crypto");
+var md5=crypto.createHash("md5");
+var salt=auth.salt
+md5.update(salt+"123456");
+var pw=md5.digest("hex");
 pool.connect(function(err, client, done) {
   if(err) {
     return console.error('db connect err', err);
@@ -28,7 +33,7 @@ pool.connect(function(err, client, done) {
 				isBaned INT,\
 				password VARCHAR(256)\
 				);\n\
-				INSERT INTO users (username,password,type) VALUES (\'admin\',\'123456\',\'{"admin":true,"su":true}\');', function(err, result) {
+				INSERT INTO users (username,password,type) VALUES (\'admin\',\''+pw+'\',\'{"admin":true,"su":true}\');', function(err, result) {
     done();
     if(err) {
       return console.error('queryerr', err);
@@ -37,6 +42,6 @@ pool.connect(function(err, client, done) {
     console.log(result.rows[0].out);
   });
 });
-console.log("DB init comp!")
+console.log("DB init comp! username=admin pw="+pw)
 
 

@@ -24,3 +24,8 @@
 4056:M 27 Sep 19:50:10.588 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command 'echo never > /sys/kernel/mm/transparent_hugepage/enabled' as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled.
 4056:M 27 Sep 19:50:10.588 * DB loaded from disk: 0.000 seconds
 4056:M 27 Sep 19:50:10.588 * The server is now ready to accept connections on port 6379
+Sat, 29 Sep 2018 04:46:00 GMT express-session deprecated undefined resave option; provide resave option at server2.js:29:9
+Sat, 29 Sep 2018 04:46:00 GMT express-session deprecated undefined saveUninitialized option; provide saveUninitialized option at server2.js:29:9
+Sat, 29 Sep 2018 04:46:00 GMT body-parser deprecated bodyParser: use individual json/urlencoded middlewares at server2.js:33:9
+Sat, 29 Sep 2018 04:46:00 GMT body-parser deprecated undefined extended: provide extended option at node_modules/body-parser/index.js:105:29
+8081
