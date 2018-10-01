@@ -25,7 +25,7 @@ pool.connect(function(err, client, done) {
 				nick VARCHAR(128),\
 				email VARCHAR(256),\
 				register_time BIGINT,\
-				register_ip INT,\
+				register_ip VARCHAR(46),\
 				last_login_time BIGINT,\
 				phone VARCHAR(20),\
 				moto TEXT,\
@@ -50,7 +50,7 @@ pool.connect(function(err, client, done) {
   lon INT,\
   lat INT,\
   alt INT,\
-  t_ip INT);',function(err,results){
+  t_ip VARCHAR(46));',function(err,results){
     if(err){
       done();
       return console.error('queryerr',err);
