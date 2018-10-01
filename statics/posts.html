@@ -17,7 +17,7 @@ po();
 function posts(p){
 return '<div class="panel panel-default">\
 <div class="panel-heading text-center">\
-<p><strong>标题：'+p.title+'</strong></p><p><small>作者:'+p.author+'<small></p>\
+<p><strong>标题：'+p.title+'</strong></p><p><small>作者:'+p.author+'</small></p>\
 </div>\
 <div class="panel-body"><p>'+p.content+'</p>\
 </div>\
@@ -74,7 +74,7 @@ $("#ps").append(posts(e));
 <label for="title"class="control-label">标题:</label><input type="text" class="form-control" id="title">
 </div>
 <label for="title"class="control-label">正文:</label>
-<textarea class="form-control" rows="5" id="content"></textarea>
+<textarea class="form-control" rows="4" id="content"></textarea>
 <br>
 <button class="btn btn-primary" type="submit">提交</button>
 
