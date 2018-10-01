@@ -41,6 +41,20 @@ pool.connect(function(err, client, done) {
 	if(result.rows!=null)
     console.log(result.rows[0].out);
   });
+  client.query('DROP TABLE IF EXISTS topic;\n\
+  CREATE TABLE topic(\
+  title VARCHAR(30),\
+  content VARCHAR(50000),\
+  author VARCHAR(128),\
+  time BIGINT,\
+  lon INT,\
+  lat INT,\
+  alt INT,\
+  t_ip INT);',function(err,results){
+    if(err){
+      return console.error('queryerr',err);
+    }
+  });
 });
 console.log("DB init comp! username=admin pw="+pw)
 
