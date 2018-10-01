@@ -50,7 +50,7 @@ pool.connect(function(err, client, done) {
   lon INT,\
   lat INT,\
   alt INT,\
-  t_ip INT);',function(err,results){
+  t_ip VARCHAR(64));',function(err,results){
     if(err){
       done();
       return console.error('queryerr',err);
