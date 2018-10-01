@@ -193,9 +193,7 @@ app.post('/register', function (req, res) {
         });
     }
 });
-<<<<<<< HEAD
-=======
+
 app.get('/info',function(req,res){
 	ret(req,res,JSON.stringify({"username":req.session.u}));
 });
->>>>>>> a3f6ef879e3f78aa304d7eacee87907a075adae1
