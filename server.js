@@ -227,4 +227,5 @@ app.get('/posts',function(req,res){
 		});
 	}else{
 	ret(res,"NotLogined");
+}
 });
