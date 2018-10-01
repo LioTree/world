@@ -13,7 +13,7 @@ var RedisStore = require('connect-redis')(session);
 var xss=require('xss');
 var crypto=require('crypto');
 
-function ret(req,res,str){
+function ret(res,str){
    res.writeHead(200, {'Content-Type': 'text/html'});	
    res.write(str);		
    res.end();
@@ -81,12 +81,12 @@ app.post('/login',function(req,res){
 	if(req.session.u==null&&req.body.u!=null&&req.body.p!=null){
 		pool.connect(function(err, client, done){
 			if(err){
-                		ret(req,res,"error");
+                		ret(res,"error");
 				return console.error("db connnet err",err);
 			}
 			client.query("SELECT * FROM users WHERE username=$1",[xss(req.body.u)],function(err,result){
 				if(err){
-                    ret(req,res,"error");
+                    ret(res,"error");
 					return console.error("db query err",err);
 				}
 				if(result.rows[0]==null){
@@ -118,14 +118,14 @@ app.post('/passwd',function(req,res){
     {
         pool.connect(function(err,client,done){
             if(err){
-                ret(req,res,'error');
+                ret(res,'error');
                 return console.error("db connnet err",err);
             }
             client.query("SELECT * FROM users WHERE username=$1",[xss(req.body.u)],function(err,result)
             {
                 if(err)
                 {
-                    ret(req,res,"error");
+                    ret(res,"error");
                     return console.error("db query err",err);
                 }
                 if(result.rows[0]==null){
@@ -136,10 +136,10 @@ app.post('/passwd',function(req,res){
                 else if(md5(req.body.p)==result.rows[0].password){
                     client.query("UPDATE users SET password=$1 where username=$2",[md5(req.body.np),xss(req.body.u)],function(err,result){
                         if(err){
-                            ret(req,res,"error");
+                            ret(res,"error");
                             return console.error("db update err",err);
                         }
-                        ret(req,res,"ok");
+                        ret(res,"ok");
                     });
                 }
                 else{
@@ -151,7 +151,7 @@ app.post('/passwd',function(req,res){
         });
     }
     else{
-        ret(req,res,"cpwerr");
+        ret(res,"cpwerr");
     }
 });
 
@@ -168,15 +168,15 @@ app.post('/register', function (req, res) {
     if (req.session.u == null && req.body.u != null && req.body.p != null) {
         pool.connect(function (err, client, done) {
             if (err) {
-                ret(req, res, "error");
+                ret(res, "error");
                 return console.error("db connect err", err);
             }
             client.query("SELECT * FROM users WHERE username=$1", [xss(req.body.u)], function (err, result) {
                 if (result.rows[0] != null) {
-                    ret(req, res, "exist");
+                    ret(res,"exist");
                 }
                 else {
-                    client.query("INSERT INTO users (username,password) VALUES($1,$2)", [xss(req.body.u), md5(req.body.p)], function (err, result) {
+                    client.query("INSERT INTO users (username,password,register_time) values ($1,$2,$3);", [xss(req.body.u),md5(req.body.p),Date.now()], function (err, result) {
                         if (err) {
                             res.writeHead(200, { 'Content-Type': 'text/html' });
                             res.write('error');
@@ -191,9 +191,11 @@ app.post('/register', function (req, res) {
             })
 
         });
-    }
+    }else{
+	ret(res,"logined");
+	}
 });
 
 app.get('/info',function(req,res){
-	ret(req,res,JSON.stringify({"username":req.session.u}));
+	ret(res,JSON.stringify({"username":req.session.u}));
 });

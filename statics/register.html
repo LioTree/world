@@ -3,7 +3,7 @@
 <meta charset="utf-8"/>
 <title>注册</title>
 <script src="./files/js/jquery-2.1.4.min.js"></script>
-<link rel="stylesheet" href="./files/css/bootstrap.min.css">
+<link rel="stylesheet" href="/files/css/bootstrap.min.css">
 <script src="./files/js/bootstrap.min.js"></script>
 
     <style>  
@@ -75,16 +75,20 @@ $("#pd").addClass("has-error");
 }
 if(check==0){
 $.post('/register',{u:$("#user").val(),p:$("#password").val()},function(data){
-	if(data=="exsist"){
+	if(data=="exist"){
 		$("#warn").append('<div class="alert alert-danger" role="alert">用户名已存在!</div>');
-	$("#ud").addClass("has-error");
+		$("#ud").addClass("has-error");
 	}
 	if(data=="error"){
 		$("#warn").append('<div class="alert alert-danger" role="alert">服务器检验错误!请检查输入是否有非法字符!</div>');
 	}
-	if(data=="success"){
+	if(data=="ok"){
 		 $("#warn").append('<div class="alert alert-success" role="alert">注册成功!</div>');
-			window.location.href="/";
+		window.location.href="/";
+	}
+	if(data=="logined"){
+		$("#warn").append('<div class="alert alert-danger" role="alert">您已登录</div>');
+		window.location.href="/";
 	}
 });
 
