@@ -52,7 +52,11 @@ pool.connect(function(err, client, done) {
   alt INT,\
   t_ip INT);',function(err,results){
     if(err){
+      done();
       return console.error('queryerr',err);
+    }
+    else{
+      console.log('Create topic successfully');
     }
   });
 });
