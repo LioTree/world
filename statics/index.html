@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta charset="utf-8"/>
-<title>注册</title>
+<title>帖子</title>
 <script src="./files/js/jquery-2.1.4.min.js"></script>
 <link rel="stylesheet" href="./files/css/bootstrap.min.css">
 <script src="./files/js/bootstrap.min.js"></script>
@@ -33,8 +33,8 @@ return '<div class="panel panel-default">\
 '
 }
 function logout(){
-$.post("/logout");
-window.location.href="/login.html";
+$.post("/logout",function(data){
+window.location.href="/login.html";});
 }
 function po(){
 $.get("/posts",function(data){
