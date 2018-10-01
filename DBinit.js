@@ -47,9 +47,9 @@ pool.connect(function(err, client, done) {
   content TEXT,\
   author VARCHAR(128),\
   time BIGINT,\
-  lon INT,\
-  lat INT,\
-  alt INT,\
+  lon DOUBLE PRECISION,\
+  lat DOUBLE PRECISION,\
+  alt DOUBLE PRECISION,\
   pos TEXT,\
   t_ip VARCHAR(64),\
   status VARCHAR(10));\
