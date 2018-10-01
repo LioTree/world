@@ -41,8 +41,8 @@ pool.connect(function(err, client, done) {
 	if(result.rows!=null)
     console.log(result.rows[0].out);
   });
-  client.query('DROP TABLE IF EXISTS topic;\n\
-  CREATE TABLE topic(\
+  client.query('DROP TABLE IF EXISTS posts;\n\
+  CREATE TABLE posts(\
   title TEXT,\
   content TEXT,\
   author VARCHAR(128),\
@@ -57,7 +57,7 @@ pool.connect(function(err, client, done) {
       return console.error('queryerr',err);
     }
     else{
-      console.log('Create topic successfully');
+      console.log('Create posts successfully');
     }
   });
 });
