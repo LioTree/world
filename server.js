@@ -227,6 +227,7 @@ app.get('/posts',function(req,res){
             	}
 				ret(res,JSON.stringify(result.rows));
 			});
+		done();
 		});
 	}else{
 	ret(res,"NotLogined");
@@ -245,8 +246,9 @@ app.post('/post',function(req,res){
                 	ret(res, "error");
                 	return console.error("db connect err", err);
             	}
-				ret(res,JSON.stringify(result.rows));
+				ret(res,"ok");
 			});
+		done();
 		});
 	}else{
 	ret(res,"NotLogined");
