@@ -25,7 +25,11 @@ pool.connect(function(err, client, done) {
 				nick VARCHAR(128),\
 				email VARCHAR(256),\
 				register_time BIGINT,\
+<<<<<<< HEAD
 				register_ip VARCHAR(64),\
+=======
+				register_ip VARCHAR(46),\
+>>>>>>> c4c556365ca28c79f29eea64a0f7dafde6a1c8bb
 				last_login_time BIGINT,\
 				phone VARCHAR(20),\
 				moto TEXT,\
@@ -50,7 +54,11 @@ pool.connect(function(err, client, done) {
   lon INT,\
   lat INT,\
   alt INT,\
+<<<<<<< HEAD
   t_ip VARCHAR(64));',function(err,results){
+=======
+  t_ip VARCHAR(46));',function(err,results){
+>>>>>>> c4c556365ca28c79f29eea64a0f7dafde6a1c8bb
     if(err){
       done();
       return console.error('queryerr',err);
