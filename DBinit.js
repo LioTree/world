@@ -43,13 +43,14 @@ pool.connect(function(err, client, done) {
   });
   client.query('DROP TABLE IF EXISTS topic;\n\
   CREATE TABLE topic(\
-  title VARCHAR(30),\
-  content VARCHAR(50000),\
+  title TEXT,\
+  content TEXT,\
   author VARCHAR(128),\
   time BIGINT,\
   lon INT,\
   lat INT,\
   alt INT,\
+  pos TEXT,\
   t_ip VARCHAR(64));',function(err,results){
     if(err){
       done();
