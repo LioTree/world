@@ -289,8 +289,9 @@ app.get('/userlist',function(req,res){
                         ret(res,JSON.stringify(result.rows));
                     });
                 }
+                
             });
-	done();
+            done();
         });
     }
     else
@@ -332,9 +333,11 @@ app.get('/username',function(req,res){
                             });
                         }
                     }
+                    
                 });
-            } 
-	done();  
+
+            }   
+        done();
         });
     }
     else
@@ -377,8 +380,8 @@ app.get('/userid',function(req,res){
                         }
                     }
                 });
-            }
-	done();   
+            }   
+            done();
         });
     }
     else
@@ -389,7 +392,7 @@ app.get('/userid',function(req,res){
 
 
 
-app.post('/changtype',function(req,res){
+app.post('/changetype',function(req,res){
     if(req.session.u!=null){
         pool.connect(function(err,client,done){
             if(err){
@@ -422,8 +425,8 @@ app.post('/changtype',function(req,res){
                         }
                     }
                 });
-            }
-	done();  
+            }   
+            done();
         });
     }
     else
