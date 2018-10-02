@@ -20,7 +20,7 @@ ln();
 po();
 }
 function ct(id){
-$.post("/changtype",{id:id,newtype:$("#p"+id).val()},function(data){
+$.post("/changetype",{id:id,newtype:$("#p"+id).val()},function(data){
 if(data=="ok"){
 po();
 }
