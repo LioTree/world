@@ -29,11 +29,11 @@ pool.connect(function(err, client, done) {
 				last_login_time BIGINT,\
 				phone VARCHAR(20),\
 				moto TEXT,\
-				type JSON,\
+				type VARCHAR(15),\
 				isBaned VARCHAR(10),\
 				password VARCHAR(256)\
 				);\n\
-				INSERT INTO users (username,password,type) VALUES (\'admin\',\''+pw+'\',\'{"admin":true,"su":true}\');', function(err, result) {
+				INSERT INTO users (username,password,type) VALUES (\'admin\',\''+pw+'\',\'su\');', function(err, result) {
     done();
     if(err) {
       return console.error('queryerr', err);
