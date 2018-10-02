@@ -22,7 +22,7 @@ po();
 function posts(p){
 nd=new Date();
 nd.setTime(p.register_time);
-return '<tr><td>'+p.uid+'</td><td>'+p.username+'</td><td>'+p.nick+'</td><td>'+p.email+'</td><td>'+p.phone+'</td><td>'+p.moto+'</td><td>'+p.type+'</td><td>'+nd+'</td></tr>';
+return '<tr><td>'+p.uid+'</td><td>'+p.username+'</td><td>'+p.nick+'</td><td>'+p.email+'</td><td>'+p.phone+'</td><td>'+p.moto+'</td><td>'+p.type+'</td><td>'+nd.toLocaleString()+'</td></tr>';
 }
 function logout(){
 $.post("/logout",function(data){
