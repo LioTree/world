@@ -317,7 +317,11 @@ app.get('/username',function(req,res){
                         else
                         {
                             client.query("SELECT * FROM users where username = $1",[xss(req.query.name)],function(err,result){
-                                ret(res,JSON.stringify(result.rows)); 
+                                if(err||result==null){
+                                    ret(res,"error");
+                                    return console.error("db query err",err);
+                                }
+                                ret(res,JSON.stringify(result.rows));
                             });
                         }
                     }
@@ -356,7 +360,11 @@ app.get('/userid',function(req,res){
                         else
                         {
                             client.query("SELECT * FROM users where uid = $1",[xss(req.query.id)],function(err,result){
-                                ret(res,JSON.stringify(result.rows)); 
+                                if(err||result==null){
+                                    ret(res,"error");
+                                    return console.error("db query err",err);
+                                }
+                                ret(res,JSON.stringify(result.rows));
                             });
                         }
                     }
@@ -370,3 +378,46 @@ app.get('/userid',function(req,res){
     }
 });
 
+
+
+app.get('/changtype',function(req,res){
+    if(req.session.u!=null){
+        pool.connect(function(err,client,done){
+            if(err){
+                ret(res,'error');
+                return console.error("db connect err",err);
+            }
+            else{
+                client.query("SELECT * FROM users WHERE username=$1 AND type=$2",[xss(req.session.u),'su'],function(err,result){
+                    if(err)
+                    {
+                        ret(res,"error");
+                    return console.error("db query err",err);
+                    }
+                    else
+                    {
+                        if(result.rows[0]==null){
+                            res.writeHead(200, {'Content-Type': 'text/html'});	
+                             res.write('fobidden');		
+                              res.end();
+                        }
+                        else
+                        {
+                            client.query("UPDATE users SET type=$1 where uid=$2",[xss(req.query.newtype),xss(req.query.id)],function(err,result){
+                                if(err||result==null){
+                                    ret(res,"error");
+                                    return console.error("db query err",err);
+                                }
+                                ret(res,'ok');
+                            });
+                        }
+                    }
+                });
+            }   
+        });
+    }
+    else
+    {
+        ret(res,'NotLogined');
+    }
+});
