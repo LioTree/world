@@ -243,7 +243,7 @@ app.post('/post',function(req,res){
                 ret(res, "error");
                 return console.error("db connect err", err);
             }
-            if(req.body.content.length >10000 || req.body.title.length>200 || req.body.pos>200 || req.body.lon>180 || req.body.lon<(-180) || req.body.lat>90 || req.body.lat<(-90) )
+            if(req.body.content.length >5000 || req.body.title.length>100 || req.body.pos>100 || req.body.lon>=180 || req.body.lon<=(-180) || req.body.lat>=90 || req.body.lat<=(-90) )
             {
                 ret(res,'checkerr');
                 return console.log("checkerr");
