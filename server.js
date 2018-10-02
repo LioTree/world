@@ -235,12 +235,18 @@ app.get('/posts',function(req,res){
 	}
 });
 
+
 app.post('/post',function(req,res){
 	if(req.session.u!=null){
 		pool.connect(function (err,client,done) {
             if (err) {
                 ret(res, "error");
                 return console.error("db connect err", err);
+            }
+            if(req.body.content.length >5000 || req.body.title.length>100 || req.body.pos>100 || req.body.lon>180 || req.body.lon<(-180) || req.body.lat>90 || req.body.lat<(-90) )
+            {
+                ret(res,'checkerr');
+                return console.log("checkerr");
             }
             client.query("INSERT INTO posts (title,content,author,pos,lon,lat,alt,time,status) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)",[xss(req.body.title),xss(req.body.content),xss(req.session.u),xss(req.body.pos),req.body.lon,req.body.lat,req.body.alt,Date.now(),"display"], function (err, result) {
 				if (err) {
