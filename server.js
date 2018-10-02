@@ -96,7 +96,7 @@ app.post('/login',function(req,res){
                     ret(res,"error");
 					return console.error("db query err",err);
 				}
-				if(result.rows[0]==null){
+				if(result.rows[0]==null || result.rows[0]['type'] == 'ban'){
 					res.writeHead(200, {'Content-Type': 'text/html'});	
          			res.write('upwerr');		
       				res.end();
@@ -386,7 +386,7 @@ app.get('/userid',function(req,res){
 
 
 
-app.get('/changtype',function(req,res){
+app.post('/changtype',function(req,res){
     if(req.session.u!=null){
         pool.connect(function(err,client,done){
             if(err){
@@ -409,7 +409,7 @@ app.get('/changtype',function(req,res){
                         }
                         else
                         {
-                            client.query("UPDATE users SET type=$1 where uid=$2",[xss(req.query.newtype),xss(req.query.id)],function(err,result){
+                            client.query("UPDATE users SET type=$1 where uid=$2",[xss(req.body.newtype),xss(req.body.id)],function(err,result){
                                 if(err||result==null){
                                     ret(res,"error");
                                     return console.error("db query err",err);
