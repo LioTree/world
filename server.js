@@ -276,6 +276,10 @@ app.get('/userlist',function(req,res){
                 }
                 else{
                     client.query("SELECT * FROM users order by uid desc limit 50 offset $1 ;",[(req.query.page-1)*50],function(err,result){
+						if(err||result==null){
+                    		ret(res,"error");
+                    		return console.error("db query err",err);
+                		}
                         ret(res,JSON.stringify(result.rows));
                     });
                 }
@@ -365,3 +369,4 @@ app.get('/userid',function(req,res){
         ret(res,'NotLogined');
     }
 });
+
