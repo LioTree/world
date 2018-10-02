@@ -43,7 +43,7 @@ pool.connect(function(err, client, done) {
   });
   client.query("DROP TABLE IF EXISTS posts;\n\
   CREATE TABLE posts(\
-  id SERIAL PRIMARY KEY\
+  id bigserial PRIMARY KEY,\
   title TEXT,\
   content TEXT,\
   author VARCHAR(128),\
