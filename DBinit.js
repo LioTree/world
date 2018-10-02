@@ -30,7 +30,7 @@ pool.connect(function(err, client, done) {
 				phone VARCHAR(20),\
 				moto TEXT,\
 				type JSON,\
-				isBaned INT,\
+				isBaned VARCHAR(10),\
 				password VARCHAR(256)\
 				);\n\
 				INSERT INTO users (username,password,type) VALUES (\'admin\',\''+pw+'\',\'{"admin":true,"su":true}\');', function(err, result) {
