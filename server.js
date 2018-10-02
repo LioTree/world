@@ -257,7 +257,8 @@ app.post('/post',function(req,res){
 			});
 		done();
 		});
-	}else{
+    }
+    else{
 	ret(res,"NotLogined");
 	}
 });
@@ -335,9 +336,8 @@ app.get('/username',function(req,res){
                     }
                     
                 });
-
             }   
-        done();
+            done();
         });
     }
     else
@@ -370,7 +370,7 @@ app.get('/userid',function(req,res){
                         }
                         else
                         {
-                            client.query("SELECT * FROM users where uid = $1",[xss(req.query.id)],function(err,result){
+                            client.query("SELECT * FROM users where uid = $1",[xss(parseInt(req.query.id))],function(err,result){
                                 if(err||result==null){
                                     ret(res,"error");
                                     return console.error("db query err",err);
@@ -415,7 +415,7 @@ app.post('/changetype',function(req,res){
                         }
                         else
                         {
-                            client.query("UPDATE users SET type=$1 where uid=$2",[xss(req.body.newtype),parseInt(req.body.id)],function(err,result){
+                            client.query("UPDATE users SET type=$1 where uid=$2",[xss(req.body.newtype),xss(parseInt(req.body.id))],function(err,result){
                                 if(err||result==null){
                                     ret(res,"error");
                                     return console.error("db query err",err);
@@ -434,3 +434,4 @@ app.post('/changetype',function(req,res){
         ret(res,'NotLogined');
     }
 });
+
