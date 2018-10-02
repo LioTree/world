@@ -7,25 +7,19 @@
 <script src="/files/js/bootstrap.min.js"></script>
 <script>
     function loadname(){
-		$.get("/myname",{},function(data){
-			$.get("/gapi",{"op":"me"},function(dataa){
-
-
-					if(dataa!="err"){
-					dataa=JSON.parse(dataa);
-				$("#h").html(dataa.nick+"    "+data);
-				$("#title").html(dataa.nick+"    "+data);
-				$("#un").html(dataa.name);
+		$.get("/infos",function(dataa){
+			if(dataa!="err"){
+				dataa=JSON.parse(dataa);
+				$("#uid").html(dataa.uid);
+				$("#un").html(dataa.username);
 				$("#nk").html(dataa.nick);
-				$("#fd").html(dataa.fx+"-"+dataa.fy);
-				$("#og").html(dataa.orgname);
-				
-				$("#reg").html(new Date(dataa.regTime).toLocaleString());
+				$("#em").html(dataa.email);
+				$("#tp").html(dataa.type);
+				$("#rt").html(new Date(dataa.register_time).toLocaleString());
 			}else{
-			window.location.href="./newplayer.html";
+			window.location.href="./register.html";
 			}
 		});
-	});
 	}
 	function load(){
 		loadname();
@@ -54,11 +48,12 @@
 	</div>
 			  <table class="table table-default" id="info" style="word-wrap:break-word;word-break:break-all;">
 				  <tr><th>项目</th><th>值</th></tr>
-				<tr><th>用户名</th><td id="un"></td></tr>
+				<tr><th>UID</th><td id="uid"></td></tr>
+				  <tr><th>用户名</th><td id="un"></td></tr>
 				  <tr><th>昵称</th><td id="nk"></td></tr>
-				  <tr><th>住处</th><td id="fd"></td></tr>
-				  <tr><th>阵营</th><td id="og"></td></tr>
-				  <tr><th>注册时间</th><td id="reg"></td></tr>
+				  <tr><th>电邮</th><td id="em"></td></tr>
+				<tr><th>类型</th><td id="tp"></td></tr>
+				  <tr><th>注册时间</th><td id="rt"></td></tr>
 				  
 			  </table>
    

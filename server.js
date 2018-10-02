@@ -212,7 +212,26 @@ app.post('/register', function (req, res) {
 app.get('/info',function(req,res){
 	ret(res,JSON.stringify({"username":req.session.u}));
 });
-
+app.get('/infos',function(req,res){
+	if(req.session.u!=null){
+		pool.connect(function (err,client,done) {
+            if (err) {
+                ret(res, "error");
+                return console.error("db connect err", err);
+            }
+            client.query("SELECT uid,username,phone,register_time,email,type,nick FROM users WHERE username=$1;",[xss(req.session.u)], function (err, result) {
+				if (err) {
+                	ret(res, "error");
+                	return console.error("db connect err", err);
+            	}
+			ret(res,JSON.stringify(result.rows[0]));
+			});
+		done();
+		});
+	}else{
+	ret(res,"NotLogined");
+	}
+});
 
 app.get('/posts',function(req,res){
 	if(req.session.u!=null){
