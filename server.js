@@ -290,6 +290,7 @@ app.get('/userlist',function(req,res){
                     });
                 }
             });
+	done();
         });
     }
     else
@@ -332,7 +333,8 @@ app.get('/username',function(req,res){
                         }
                     }
                 });
-            }   
+            } 
+	done();  
         });
     }
     else
@@ -375,7 +377,8 @@ app.get('/userid',function(req,res){
                         }
                     }
                 });
-            }   
+            }
+	done();   
         });
     }
     else
@@ -409,7 +412,7 @@ app.post('/changtype',function(req,res){
                         }
                         else
                         {
-                            client.query("UPDATE users SET type=$1 where uid=$2",[xss(req.body.newtype),xss(req.body.id)],function(err,result){
+                            client.query("UPDATE users SET type=$1 where uid=$2",[xss(req.body.newtype),parseInt(req.body.id)],function(err,result){
                                 if(err||result==null){
                                     ret(res,"error");
                                     return console.error("db query err",err);
@@ -419,7 +422,8 @@ app.post('/changtype',function(req,res){
                         }
                     }
                 });
-            }   
+            }
+	done();  
         });
     }
     else
