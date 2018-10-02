@@ -333,9 +333,10 @@ app.get('/username',function(req,res){
                             });
                         }
                     }
-                    done();
+                    
                 });
             }   
+            done();
         });
     }
     else
