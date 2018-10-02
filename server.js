@@ -98,7 +98,7 @@ app.post('/login',function(req,res){
 				}
 				if(result.rows[0]==null){
 					res.writeHead(200, {'Content-Type': 'text/html'});	
-         			res.write('nouser');		
+         			res.write('upwerr');		
       				res.end();
 				}else if(md5(req.body.p)==result.rows[0].password){
 					req.session.u=req.body.u;
@@ -108,7 +108,7 @@ app.post('/login',function(req,res){
       				res.end();
 				}else{
          			res.writeHead(200, {'Content-Type': 'text/html'});	
-         			res.write('pwerr');		
+         			res.write('upwerr');		
       				res.end();
 				}
 			});
@@ -139,7 +139,7 @@ app.post('/passwd',function(req,res){
                 }
                 if(result.rows[0]==null){
 					res.writeHead(200, {'Content-Type': 'text/html'});	
-         			res.write('nouser');		
+         			res.write('upwerr');		
                       res.end();
                 }
                 else if(md5(req.body.p)==result.rows[0].password){
@@ -153,7 +153,7 @@ app.post('/passwd',function(req,res){
                 }
                 else{
                     res.writeHead(200, {'Content-Type': 'text/html'});	
-         			res.write('pwerr');		
+         			res.write('upwerr');		
       				res.end();
                 }
             });
@@ -256,3 +256,34 @@ app.post('/post',function(req,res){
 	}
 });
 
+app.get('/userlist',function(req,res){
+    if(req.session.u!=null)
+    {
+        pool.connect(function(err,client,done){
+            if(err){
+                ret(res,'error');
+                return console.error("db connect err",err);
+            }
+            client.query("SELECT * FROM users WHERE username=$1 AND type=$2",[xss(req.session.u),'su'],function(err,result){
+                if(err){
+                    ret(res,"error");
+                    return console.error("db query err",err);
+                }  
+                if(result.rows[0]==null){
+                    res.writeHead(200, {'Content-Type': 'text/html'});	
+         			res.write('fobidden');		
+      				res.end();
+                }
+                else{
+                    client.query("SELECT * FROM users order by uid desc limit 50 offset $1 ;",[(req.query.page-1)*50],function(err,result){
+                        ret(res,JSON.stringify(result.rows));
+                    });
+                }
+            });
+        });
+    }
+    else
+    {
+        ret(res,'NotLogined');
+    }
+});
