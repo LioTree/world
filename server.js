@@ -190,7 +190,7 @@ app.post('/register', function (req, res) {
                     ret(res,"exist");
                 }
                 else {
-                    client.query("INSERT INTO users (username,password,register_time,register_ip,type) values ($1,$2,$3,$4,$5);", [xss(req.body.u),md5(req.body.p),Date.now(),getip(req),'user'], function (err, result) {
+                    client.query("INSERT INTO users (username,password,register_time,register_ip,type) values ($1,$2,$3,$4,$5);", [xss(req.body.u),md5(req.body.p),Date.now(),getip(req),'normal'], function (err, result) {
                         if (err) {
                             res.writeHead(200, { 'Content-Type': 'text/html' });
                             res.write('error');
