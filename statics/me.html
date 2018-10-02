@@ -6,6 +6,19 @@
 <link rel="stylesheet" href="/files/css/bootstrap.min.css">
 <script src="/files/js/bootstrap.min.js"></script>
 <script>
+function logout(){
+$.post("/logout",function(data){
+window.location.href="/login.html";
+});
+}
+function ln(){
+$.get('/info',function(data){
+$('#h').html(JSON.parse(data).username);
+if(JSON.parse(data).username==null){
+window.location.href="/login.html";
+}
+});
+}
     function loadname(){
 		$.get("/infos",function(dataa){
 			if(dataa!="err"){
@@ -23,6 +36,7 @@
 	}
 	function load(){
 		loadname();
+		ln();
 
 	}
 	window.onload=load;
