@@ -39,6 +39,7 @@ window.location.href="/login.html";
 function po(){
 $.get("/userlist",{page:1},function(data){
 JSON.parse(data).forEach(function(e){
+$("#tb").html("");
 $("#tb").append(posts(e));
 });
 });
