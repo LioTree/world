@@ -64,13 +64,9 @@ $("#ud").addClass("has-error");
 }
 if(check==0){
 $.post('/login',{u:$("#user").val(),p:$("#password").val()},function(data){
-	if(data=="pwerr"){
-		$("#warn").append('<div class="alert alert-danger" role="alert">密码错误</div>');
+	if(data=="upwerr"){
+		$("#warn").append('<div class="alert alert-danger" role="alert">用户名不存在或密码错误</div>');
 		$("#pd").addClass("has-error");
-	}
-	if(data=="nouser"){
-		$("#warn").append('<div class="alert alert-danger" role="alert">无此用户</div>');
-		$("#ud").addClass("has-error");
 	}
 		if(data=="logined"){
 			$("#warn").append('<div class="alert alert-danger" role="alert">您已登录</div>');
