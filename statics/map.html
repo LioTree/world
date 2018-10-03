@@ -14,25 +14,28 @@
     <style type="text/css">  
         html{height:100%}  
         body{height:100%;margin:0px;padding:0px}  
-        #container{height:100%;width:50%}  
+        #container{height:50%;width:30%}  
     </style>  
 
     <script src="http://api.map.baidu.com/api?v=1.4"></script>
   
-</head>
+	</head>
   <body>
     <h1>The World</h1>
     
-    <div class="row">
-        <div class="col-xs-6">
+    <div class="row" style="height:80%">
+        <div class="col-xs-6" style="height:100%">
             <h2 class="page-header">地图</h2>
-            <div id="container"></div>
-            <script type="text/javascript"> 
+            <div id="container" onload="" style="width:100%;height:100%"></div>
+            <script type="text/javascript">
+		window.onload=ol(); 
+		function ol(){
                 var map = new BMap.Map("container");
                     // 创建地图实例  
-                    var point = new BMap.Point(116.404, 39.915);
+                    var point = new BMap.Point(116.404,39.915);
                     // 创建点坐标  
                     map.centerAndZoom(point, 15);
+		}
                     // 初始化地图，设置中心点坐标和地图级别  
                     </script> 
         </div>
@@ -41,7 +44,8 @@
         <div class="col-xs-6" class="pre-scrollable" style="overflow-y:auto">
             <h2 class="page-header">帖子列表</h2>
             <div id="list"><p>aaaaaa</p></div> 
-        </div>>
+        </div>
+	</div>
 
         
   </body>
