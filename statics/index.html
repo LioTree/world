@@ -15,8 +15,8 @@
 
     <style type="text/css">  
         html{height:100%}  
-        body{height:100%;margin:0px;padding:0px}  
-        #container{height:50%;width:30%}  
+        body{height:95%;margin:0px;padding:0px}  
+        
     </style>  
 
     <script src="http://api.map.baidu.com/api?v=1.4"></script>
@@ -84,19 +84,19 @@
     <h1>
       <nav class="navbar navbar-default ">
         <div class="container-fluid">
-          <div class="navbar-header  col-xs-4 col-sm-4">
+          <div class="navbar-header  col-sm-4 col-sm-4">
             <a class="navbar-brand" href="/">
               <img alt="THE WORLD" src="...">
             </a>
           </div>
-          <div class=" col-xs-6 col-sm-6  text-center navbar-inner"></div>
+          <div class=" col-sm-6 col-sm-6  text-center navbar-inner"></div>
                       <div class="col-sm-offset-6 col-sm-2 text-center navbar-inner"><a class="navbar-link" href="./me.html" id="h"></a> <button class="btn btn-default navbar-btn " onclick="logout()">登出</button></div>
                       
         </div>
       </nav>
     </h1>
     <div class="row" style="height:80%">
-        <div class="col-xs-6" style="height:100%">
+        <div class="col-sm-6" style="height:100%">
             <h2 class="page-header">地图</h2>
             <div id="container" onload="" style="width:100%;height:100%"></div>
             <script type="text/javascript">
@@ -117,14 +117,14 @@
         </div>
        
 
-        <div class="col-xs-6" class="pre-scrollable" style="overflow-y:auto">
+        <div class="col-sm-6">
             <h2 class="page-header">帖子列表</h2>
 
                   
                       <div><br></div>
-                  <div class="col-sm-8 col-sm-offset-2">
+                  <div class="col-sm-10 col-sm-offset-1 pre-scrollable"  style="overflow-y:auto">
                   <form>
-                  <div class="col-sm-8">
+                  <div>
                   <div class="form-inline">
                   <div class="form-group">
                   <label for="lon" class="control-label">经度:</label><input type="text" class="form-control" id="lon">
