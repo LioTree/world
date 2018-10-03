@@ -68,7 +68,7 @@ $.post('/login',{u:$("#user").val(),p:$("#password").val()},function(data){
 		$("#warn").append('<div class="alert alert-danger" role="alert">用户名不存在或密码错误</div>');
 		$("#pd").addClass("has-error");
 	}
-		if(data=="logined"){
+	if(data=="logined"){
 			$("#warn").append('<div class="alert alert-danger" role="alert">您已登录</div>');
 			window.location.href="/";
 		}

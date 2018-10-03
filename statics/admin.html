@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="./files/css/bootstrap.min.css">
 <script src="./files/js/bootstrap.min.js"></script>
 <script>
+pgs=1;
 window.onload=ol();
 function ln(){
 $.get('/info',function(data){
@@ -19,7 +20,7 @@ window.location.href="/login.html";
 function ct(id){
 $.post("/changetype",{id:id,newtype:$("#p"+id).val()},function(data){
 if(data=="ok"){
-ln();
+ol();
 }
 });
 }
@@ -35,6 +36,7 @@ window.location.href="/login.html";
 }
 function po(a){
 a=parseInt(a);
+pgs=a;
 $.get("/userlist",{page:a},function(data){
 if(data!="error"&&data!="fobidden"){
 $("#pg").html('\
@@ -57,7 +59,7 @@ $("#tb").append(posts(e));
 }
 function ol(){
 ln();
-po(1);
+po(pgs);
 }
 </script>
 </head>
