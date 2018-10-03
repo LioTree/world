@@ -15,10 +15,7 @@ window.location.href="/login.html";
 }
 });
 }
-function ol(){
-ln();
-po();
-}
+
 function ct(id){
 $.post("/changetype",{id:id,newtype:$("#p"+id).val()},function(data){
 if(data=="ok"){
@@ -36,13 +33,31 @@ $.post("/logout",function(data){
 window.location.href="/login.html";
 });
 }
-function po(){
-$.get("/userlist",{page:1},function(data){
+function po(a){
+a=parseInt(a);
+$.get("/userlist",{"page":a},function(data){
+if(data!="error"&&data!="fobidden"){
+$("#pg").html('\
+<ul class="pagination">\
+	<li><a href="#">&laquo;</a></li>\
+    <li><a onclick="page('+(a-2)+')">'+(a-2)+'</a></li>\
+    <li><a onclick="page('+(a-1)+')">'+(a-1)+'</a></li>\
+    <li><a onclick="page('+a+')">'+(a)+'</a></li>\
+    <li><a onclick="page('+(a+1)+')">'+(a+1)+'</a></li>\
+    <li><a onclick="page('+(a+2)+')">'+(a+2)+'</a></li>\
+    <li><a href="#">&raquo;</a></li>\
+</ul>\
+');
 JSON.parse(data).forEach(function(e){
 $("#tb").html("");
 $("#tb").append(posts(e));
 });
+}
 });
+}
+function ol(){
+ln();
+po(1);
 }
 </script>
 </head>
@@ -61,7 +76,8 @@ $("#tb").append(posts(e));
 </nav>
 	<div><br></div>
 <div class="col-sm-8 col-sm-offset-2">
-<div></div>
+
+<div id="pg"></div>
 <table class="table table-striped">
 <thead>
 <th>ID</th><th>用户名</th><th>昵称</th><th>电邮</th><th>手机</th><th>签名</th><th>类型</th><th>注册时间</th><th>将类型设为</th>

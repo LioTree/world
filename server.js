@@ -429,8 +429,8 @@ app.post('/changetype',function(req,res){
                     {
                         if(result.rows[0]==null){
                             res.writeHead(200, {'Content-Type': 'text/html'});	
-                             res.write('fobidden');		
-                              res.end();
+                            res.write('fobidden');		
+                            res.end();
                         }
                         else
                         {
@@ -453,4 +453,3 @@ app.post('/changetype',function(req,res){
         ret(res,'NotLogined');
     }
 });
-
