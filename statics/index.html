@@ -1,116 +1,169 @@
-<html>
-<head>
-<meta charset="utf-8"/>
-<title>帖子</title>
-<script src="./files/js/jquery-2.1.4.min.js"></script>
-<link rel="stylesheet" href="./files/css/bootstrap.min.css">
-<script src="./files/js/bootstrap.min.js"></script>
-<script>
-window.onload=ol();
-function ln(){
-$.get('/info',function(data){
-$('#h').html(JSON.parse(data).username);
-if(JSON.parse(data).username==null){
-window.location.href="/login.html";
-}
-});
-}
-function ol(){
-ln();
-po();
-}
-function posts(p){
-nd=new Date();
-nd.setTime(p.time);
-return '<div class="panel panel-default">\
-<div class="panel-heading">\
-<p><strong>标题：'+p.title+'</strong><small  class="pull-right">作者:'+p.author+'</small></p>\
-</div>\
-<div class="panel-body"><div>'+p.content.replace(/\n/g,"<br>")+'</div>\
-</div>\
-<div class="panel-footer">\
-<p>地点:'+p.pos+' 经度:'+p.lon+' 纬度:'+p.lat+'<small class="pull-right">'+nd.toLocaleString()+'</small></p>\
-</div>\
-</div>\
-'
-}
-function logout(){
-$.post("/logout",function(data){
-window.location.href="/login.html";});
-}
-function po(){
-$.get("/posts",function(data){
-JSON.parse(data).forEach(function(e){
-$("#ps").append(posts(e));
-});
-});
-}
-function post(){
-$.post("/post",{
-lon:$("#lon").val(),
-lat:$("#lat").val(),
-title:$("#title").val(),
-content:$("#content").val(),
-pos:$("#pos").val(),
-alt:$("#alt").val()
-},function(data){
-if(data=="ok"){
-$("#ps").html("");
-po();
-}
-});
-}
-</script>
-</head>
-<body>
-<nav class="navbar navbar-default ">
-  <div class="container-fluid">
-    <div class="navbar-header  col-xs-4 col-sm-4">
-      <a class="navbar-brand" href="/">
-        <img alt="THE WORLD" src="...">
-      </a>
-    </div>
-    <div class=" col-xs-6 col-sm-6  text-center navbar-inner"></div>
-    			<div class="col-sm-offset-6 col-sm-2 text-center navbar-inner"><a class="navbar-link" href="./me.html" id="h"></a> <button class="btn btn-default navbar-btn " onclick="logout()">登出</button></div>
-    			
-  </div>
-</nav>
-	<div><br></div>
-<div class="col-sm-8 col-sm-offset-2">
-<form>
-<div class="col-sm-8">
-<div class="form-inline">
-<div class="form-group">
-<label for="lon" class="control-label">经度:</label><input type="text" class="form-control" id="lon">
-</div>
-<div class="form-group">
-<label for="lat" class="control-label">纬度:</label><input type="text" class="form-control" id="lat">
-</div>
-</div>
-<br>
-<div class="form-inline">
-<div class="form-group">
-<label for="alt"class="control-label">高度:</label><input type="text" class="form-control" id="alt">
-</div>
-<div class="form-group">
-<label for="pos"class="control-label">地点:</label><input type="text" class="form-control" id="pos">
-</div>
-</div>
-<div class="form-group">
-<label for="title"class="control-label">标题:</label><input type="text" class="form-control" id="title">
-</div>
-<label for="content"class="control-label">正文:</label>
-<textarea class="form-control" rows="4" id="content"></textarea>
-<br>
-<button class="btn btn-primary" onclick="post()" type="button">提交</button>
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />  
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+    <title> 
+      THE WORLD
+    </title>
 
-</div>
+    <link href="./files/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="./files/js/jquery-2.1.4.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="./files/js/bootstrap.min.js"></script>
 
-</form>
-<ul class="nav nav-list"><li class="divider"></li></ul>
-<h5 class="page-header"></h5>
-<div id="ps"></div>
+    <style type="text/css">  
+        html{height:100%}  
+        body{height:100%;margin:0px;padding:0px}  
+        #container{height:50%;width:30%}  
+    </style>  
 
-</div>
-</body>
+    <script src="http://api.map.baidu.com/api?v=1.4"></script>
+  
+
+    <script>
+        window.onload=ol();
+        function ln(){
+        $.get('/info',function(data){
+        $('#h').html(JSON.parse(data).username);
+        if(JSON.parse(data).username==null){
+        window.location.href="/login.html";
+        }
+        });
+        }
+        function ol(){
+        ln();
+        po();
+        }
+        function posts(p){
+        nd=new Date();
+        nd.setTime(p.time);
+        return '<div class="panel panel-default">\
+        <div class="panel-heading">\
+        <p><strong>标题：'+p.title+'</strong><small  class="pull-right">作者:'+p.author+'</small></p>\
+        </div>\
+        <div class="panel-body"><div>'+p.content.replace(/\n/g,"<br>")+'</div>\
+        </div>\
+        <div class="panel-footer">\
+        <p>地点:'+p.pos+' 经度:'+p.lon+' 纬度:'+p.lat+'<small class="pull-right">'+nd.toLocaleString()+'</small></p>\
+        </div>\
+        </div>\
+        '
+        }
+        function logout(){
+        $.post("/logout",function(data){
+        window.location.href="/login.html";});
+        }
+        function po(){
+        $.get("/posts",function(data){
+        JSON.parse(data).forEach(function(e){
+        $("#ps").append(posts(e));
+        });
+        });
+        }
+        function post(){
+        $.post("/post",{
+        lon:$("#lon").val(),
+        lat:$("#lat").val(),
+        title:$("#title").val(),
+        content:$("#content").val(),
+        pos:$("#pos").val(),
+        alt:$("#alt").val()
+        },function(data){
+        if(data=="ok"){
+        $("#ps").html("");
+        po();
+        }
+        });
+        }
+        </script>
+
+	</head>
+  <body>
+    <h1>
+      <nav class="navbar navbar-default ">
+        <div class="container-fluid">
+          <div class="navbar-header  col-xs-4 col-sm-4">
+            <a class="navbar-brand" href="/">
+              <img alt="THE WORLD" src="...">
+            </a>
+          </div>
+          <div class=" col-xs-6 col-sm-6  text-center navbar-inner"></div>
+                      <div class="col-sm-offset-6 col-sm-2 text-center navbar-inner"><a class="navbar-link" href="./me.html" id="h"></a> <button class="btn btn-default navbar-btn " onclick="logout()">登出</button></div>
+                      
+        </div>
+      </nav>
+    </h1>
+    <div class="row" style="height:80%">
+        <div class="col-xs-6" style="height:100%">
+            <h2 class="page-header">地图</h2>
+            <div id="container" onload="" style="width:100%;height:100%"></div>
+            <script type="text/javascript">
+		window.onload=loadmap(); 
+		function loadmap(){
+                    var map = new BMap.Map("container");
+                    // 创建地图实例  
+                    var point = new BMap.Point(116.404,39.915);
+                    // 创建点坐标  
+                    map.centerAndZoom(point, 15);
+                    // 初始化地图，设置中心点坐标和地图级别  
+                    setTimeout(function(){
+                        map.setZoom(14);   
+                    }, 2000);  //2秒后放大到14级
+                    map.enableScrollWheelZoom(true);
+		}      
+                    </script> 
+        </div>
+       
+
+        <div class="col-xs-6" class="pre-scrollable" style="overflow-y:auto">
+            <h2 class="page-header">帖子列表</h2>
+
+                  
+                      <div><br></div>
+                  <div class="col-sm-8 col-sm-offset-2">
+                  <form>
+                  <div class="col-sm-8">
+                  <div class="form-inline">
+                  <div class="form-group">
+                  <label for="lon" class="control-label">经度:</label><input type="text" class="form-control" id="lon">
+                  </div>
+                  <div class="form-group">
+                  <label for="lat" class="control-label">纬度:</label><input type="text" class="form-control" id="lat">
+                  </div>
+                  </div>
+                  <br>
+                  <div class="form-inline">
+                  <div class="form-group">
+                  <label for="alt"class="control-label">高度:</label><input type="text" class="form-control" id="alt">
+                  </div>
+                  <div class="form-group">
+                  <label for="pos"class="control-label">地点:</label><input type="text" class="form-control" id="pos">
+                  </div>
+                  </div>
+                  <div class="form-group">
+                  <label for="title"class="control-label">标题:</label><input type="text" class="form-control" id="title">
+                  </div>
+                  <label for="content"class="control-label">正文:</label>
+                  <textarea class="form-control" rows="4" id="content"></textarea>
+                  <br>
+                  <button class="btn btn-primary" onclick="post()" type="button">提交</button>
+                  
+                  </div>
+                  
+                  </form>
+                  <ul class="nav nav-list"><li class="divider"></li></ul>
+                  <h5 class="page-header"></h5>
+                  <div id="ps"></div>
+                  
+                  </div>
+
+
+
+        </div>
+	</div>
+
+        
+  </body>
 </html>
