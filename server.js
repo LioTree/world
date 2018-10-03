@@ -301,7 +301,11 @@ app.get('/userlist',function(req,res){
       				res.end();
                 }
                 else{
-                    client.query("SELECT * FROM users WHERE username LIKE $1 order by uid desc limit 50 offset $2;",["%"+xss(req.query.s)+"%",(req.query.page-1)*50],function(err,result){
+                	var sn=-100;
+                	if(parseInt(req.query.s)>=0){
+                		sn=parseInt(req.query.s);
+                	}
+                    client.query("SELECT * FROM users WHERE username LIKE $1 OR uid=$2 order by uid desc limit 50 offset $3;",["%"+xss(req.query.s)+"%",sn,(req.query.page-1)*50],function(err,result){
 						if(err||result==null){
                     		ret(res,"error");
                     		return console.error("db query err",err);
