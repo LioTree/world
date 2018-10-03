@@ -18,3 +18,6 @@ function mclick(f){
 		f(e.point.lng,e.point.lat);
 	});
 }
+function mclear(){
+	mp.clearOverlays();
+}
