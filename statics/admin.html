@@ -19,7 +19,7 @@ window.location.href="/login.html";
 function ct(id){
 $.post("/changetype",{id:id,newtype:$("#p"+id).val()},function(data){
 if(data=="ok"){
-po();
+ln();
 }
 });
 }

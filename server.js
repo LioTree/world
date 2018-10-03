@@ -96,7 +96,7 @@ app.post('/login',function(req,res){
                     ret(res,"error");
 					return console.error("db query err",err);
 				}
-				if(result.rows[0]==null || result.rows[0]['type'] == 'ban'){
+				if(result.rows[0]==null || result.rows[0].type == 'ban'){
 					res.writeHead(200, {'Content-Type': 'text/html'});	
          			res.write('upwerr');		
       				res.end();
