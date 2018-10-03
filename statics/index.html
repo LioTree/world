@@ -19,9 +19,14 @@
     </style>  
 
     <script src="http://api.map.baidu.com/api?v=1.4"></script>
+    <script src="/map.js"></script>
   
 
     <script>
+	function tc(lon,lat){
+		$("#lon").val(lon);
+		$("#lat").val(lat);
+	}
         window.onload=ol();
         function ln(){
         $.get('/info',function(data){
@@ -34,6 +39,7 @@
         function ol(){
         ln();
         po();
+		
         }
         function posts(p){
         nd=new Date();
@@ -58,6 +64,7 @@
         $.get("/posts",function(data){
         JSON.parse(data).forEach(function(e){
         $("#ps").append(posts(e));
+	label(e.lon,e.lat,e.title)
         });
         });
         }
@@ -100,16 +107,8 @@
             <script type="text/javascript">
 		window.onload=loadmap(); 
 		function loadmap(){
-                    var map = new BMap.Map("container");
-                    // 创建地图实例  
-                    var point = new BMap.Point(116.404,39.915);
-                    // 创建点坐标  
-                    map.centerAndZoom(point, 15);
-                    // 初始化地图，设置中心点坐标和地图级别  
-                    setTimeout(function(){
-                        map.setZoom(14);   
-                    }, 2000);  //2秒后放大到14级
-                    map.enableScrollWheelZoom(true);
+			newMap("container");
+			mclick(tc);
 		}      
                     </script> 
         </div>
