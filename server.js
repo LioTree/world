@@ -301,7 +301,7 @@ app.get('/userlist',function(req,res){
       				res.end();
                 }
                 else{
-                    client.query("SELECT * FROM users order by uid desc limit 50 offset $1 ;",[(req.query.page-1)*50],function(err,result){
+                    client.query("SELECT * FROM users WHERE username LIKE $1 order by uid desc limit 50 offset $2;",["%"+xss(req.query.s)+"%",(req.query.page-1)*50],function(err,result){
 						if(err||result==null){
                     		ret(res,"error");
                     		return console.error("db query err",err);
@@ -319,96 +319,6 @@ app.get('/userlist',function(req,res){
         ret(res,'NotLogined');
     }
 });
-
-
-app.get('/username',function(req,res){
-    if(req.session.u!=null){
-        pool.connect(function(err,client,done){
-            if(err){
-                ret(res,'error');
-                return console.error("db connect err",err);
-            }
-            else{
-                client.query("SELECT * FROM users WHERE username=$1 AND type=$2",[xss(req.session.u),'su'],function(err,result){
-                    if(err)
-                    {
-                        ret(res,"error");
-                    return console.error("db query err",err);
-                    }
-                    else
-                    {
-                        if(result.rows[0]==null){
-                            res.writeHead(200, {'Content-Type': 'text/html'});	
-                             res.write('fobidden');		
-                              res.end();
-                        }
-                        else
-                        {
-                            client.query("SELECT * FROM users where username LIKE $1",['%'+xss(req.query.name)+'%'],function(err,result){
-                                if(err||result==null){
-                                    ret(res,"error");
-                                    return console.error("db query err",err);
-                                }
-                                ret(res,JSON.stringify(result.rows));
-                            });
-                        }
-                    }
-                    
-                });
-            }   
-            done();
-        });
-    }
-    else
-    {
-        ret(res,'NotLogined');
-    }
-});
-
-
-app.get('/userid',function(req,res){
-    if(req.session.u!=null){
-        pool.connect(function(err,client,done){
-            if(err){
-                ret(res,'error');
-                return console.error("db connect err",err);
-            }
-            else{
-                client.query("SELECT * FROM users WHERE username=$1 AND type=$2",[xss(req.session.u),'su'],function(err,result){
-                    if(err)
-                    {
-                        ret(res,"error");
-                    return console.error("db query err",err);
-                    }
-                    else
-                    {
-                        if(result.rows[0]==null){
-                            res.writeHead(200, {'Content-Type': 'text/html'});	
-                             res.write('fobidden');		
-                              res.end();
-                        }
-                        else
-                        {
-                            client.query("SELECT * FROM users where uid = $1",[xss(parseInt(req.query.id))],function(err,result){
-                                if(err||result==null){
-                                    ret(res,"error");
-                                    return console.error("db query err",err);
-                                }
-                                ret(res,JSON.stringify(result.rows));
-                            });
-                        }
-                    }
-                });
-            }   
-            done();
-        });
-    }
-    else
-    {
-        ret(res,'NotLogined');
-    }
-});
-
 
 
 app.post('/changetype',function(req,res){
