@@ -344,7 +344,7 @@ app.get('/username',function(req,res){
                         }
                         else
                         {
-                            client.query("SELECT * FROM users where username = $1",[xss(req.query.name)],function(err,result){
+                            client.query("SELECT * FROM users where username LIKE $1",['%'+xss(req.query.name)+'%'],function(err,result){
                                 if(err||result==null){
                                     ret(res,"error");
                                     return console.error("db query err",err);
