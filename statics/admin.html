@@ -35,16 +35,17 @@ window.location.href="/login.html";
 }
 function po(a){
 a=parseInt(a);
-$.get("/userlist",{"page":a},function(data){
+console.log(a);
+$.get("/userlist",{page:a},function(data){
 if(data!="error"&&data!="fobidden"){
 $("#pg").html('\
 <ul class="pagination">\
 	<li><a href="#">&laquo;</a></li>\
-    <li><a onclick="page('+(a-2)+')">'+(a-2)+'</a></li>\
-    <li><a onclick="page('+(a-1)+')">'+(a-1)+'</a></li>\
-    <li><a onclick="page('+a+')">'+(a)+'</a></li>\
-    <li><a onclick="page('+(a+1)+')">'+(a+1)+'</a></li>\
-    <li><a onclick="page('+(a+2)+')">'+(a+2)+'</a></li>\
+    <li><a onclick="po('+(a-2)+')">'+(a-2)+'</a></li>\
+    <li><a onclick="po('+(a-1)+')">'+(a-1)+'</a></li>\
+    <li><a onclick="po('+a+')">'+(a)+'</a></li>\
+    <li><a onclick="po('+(a+1)+')">'+(a+1)+'</a></li>\
+    <li><a onclick="po('+(a+2)+')">'+(a+2)+'</a></li>\
     <li><a href="#">&raquo;</a></li>\
 </ul>\
 ');
