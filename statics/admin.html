@@ -35,7 +35,6 @@ window.location.href="/login.html";
 }
 function po(a){
 a=parseInt(a);
-console.log(a);
 $.get("/userlist",{page:a},function(data){
 if(data!="error"&&data!="fobidden"){
 $("#pg").html('\
@@ -49,8 +48,8 @@ $("#pg").html('\
     <li><a href="#">&raquo;</a></li>\
 </ul>\
 ');
-JSON.parse(data).forEach(function(e){
 $("#tb").html("");
+JSON.parse(data).forEach(function(e){
 $("#tb").append(posts(e));
 });
 }
