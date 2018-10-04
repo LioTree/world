@@ -82,6 +82,19 @@
 		mclear();
         po();
         }
+        else if(data=="checkerr"){
+          if($("#content").val().length>5000)
+          $("#checkerr").text('帖子内容过长！请不要超过5000字');
+          else if($("#title").val().length>100)
+          $("#checkerr").text('标题过长！请不要超过100字');
+          else if($("#pos").val().length>100)
+          $("#checkerr").text('位置名过长！请不要超过100字');
+          else if($("#lon").val()>=180 || $("#lon").val()<=-180)
+          $("#checkerr").text('经度过大！经度范围为-180-180');
+          else if($("#lat").val()>=90 || $("#lat").val()<=-90)
+          $("#checkerr").text('纬度过大！纬度范围为-90-90');
+
+        }
         });
         }
         </script>
@@ -143,7 +156,7 @@
                   <textarea class="form-control" rows="4" id="content"></textarea>
                   <br>
                   <button class="btn btn-primary" onclick="post()" type="button">提交</button>
-                  
+                  <p id="checkerr" style="color:red;"></p>
                   </div>
                   
                   </form>
