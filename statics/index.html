@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
   <head>
-        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />  
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
     <title> 
       THE WORLD
@@ -15,14 +14,19 @@
 
     <style type="text/css">  
         html{height:100%}  
-        body{height:95%;margin:0px;padding:0px}  
+        body{height:100%;padding:0px}  
         
     </style>  
 
     <script src="http://api.map.baidu.com/api?v=1.4"></script>
+    <script src="/map.js"></script>
   
 
     <script>
+	function tc(lon,lat){
+		$("#lon").val(lon);
+		$("#lat").val(lat);
+	}
         window.onload=ol();
         function ln(){
         $.get('/info',function(data){
@@ -35,6 +39,7 @@
         function ol(){
         ln();
         po();
+		
         }
         function posts(p){
         nd=new Date();
@@ -59,6 +64,7 @@
         $.get("/posts",function(data){
         JSON.parse(data).forEach(function(e){
         $("#ps").append(posts(e));
+	label(e.lon,e.lat,e.title)
         });
         });
         }
@@ -73,6 +79,7 @@
         },function(data){
         if(data=="ok"){
         $("#ps").html("");
+		mclear();
         po();
         }
         });
@@ -84,46 +91,32 @@
 
       <nav class="navbar navbar-default ">
         <div class="container-fluid">
-          <div class="navbar-header  col-sm-4 col-sm-4">
+          <div class="navbar-header col-sm-4">
             <a class="navbar-brand" href="/">
               <img alt="THE WORLD" src="...">
             </a>
           </div>
-          <div class=" col-sm-6 col-sm-6  text-center navbar-inner"></div>
-                      <div class="col-sm-offset-6 col-sm-2 text-center navbar-inner"><a class="navbar-link" href="./me.html" id="h"></a> <button class="btn btn-default navbar-btn " onclick="logout()">登出</button></div>
+          <div class=" col-sm-4 text-center navbar-inner"></div>
+                      <div class="text-center navbar-inner col-sm-1 col-offset-2"><h4><a class="navbar-link" href="./me.html" id="h"></a></h4> </div><div class="text-center navbar-inner col-sm-1"><button class="btn btn-default navbar-btn " onclick="logout()">登出</button></div>
                       
         </div>
       </nav>
     
-
-    <div class="row" style="height:80%">
+    <div class="row" style="height:85%">
         <div class="col-sm-6" style="height:100%">
-            <h2 class="page-header">地图</h2>
-            <div id="container" onload="" style="width:100%;height:100%"></div>
+            <div id="container" onload="" style="height:100%"></div>
             <script type="text/javascript">
 		window.onload=loadmap(); 
 		function loadmap(){
-                    var map = new BMap.Map("container");
-                    // 创建地图实例  
-                    var point = new BMap.Point(116.404,39.915);
-                    // 创建点坐标  
-                    map.centerAndZoom(point, 15);
-                    // 初始化地图，设置中心点坐标和地图级别  
-                    setTimeout(function(){
-                        map.setZoom(14);   
-                    }, 2000);  //2秒后放大到14级
-                    map.enableScrollWheelZoom(true);
+			newMap("container");
+			mclick(tc);
 		}      
                     </script> 
         </div>
        
 
-        <div class="col-sm-6">
-            <h2 class="page-header">帖子列表</h2>
-
-                  
-                      <div><br></div>
-                  <div class="col-sm-10 col-sm-offset-1 pre-scrollable"  style="overflow-y:auto">
+        <div class="col-sm-6" style="height:100%">
+                  <div style="overflow-y:scroll;height:100%">
                   <form>
                   <div>
                   <div class="form-inline">
