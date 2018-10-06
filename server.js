@@ -192,7 +192,7 @@ app.post('/register', function (req, res) {
                     ret(res,"exist");
                 }
                 else {
-                    client.query("INSERT INTO users (username,password,register_time,register_ip,type) values ($1,$2,$3,$4,$5);", [xss(req.body.u),md5(req.body.p),Date.now(),getip(req),'normal'], function (err, result) {
+                    client.query("INSERT INTO users (username,password,register_time,register_ip,type,nick) values ($1,$2,$3,$4,$5,$6);", [xss(req.body.u),md5(req.body.p),Date.now(),getip(req),'normal',"匿名用户"], function (err, result) {
                         if (err) {
                             res.writeHead(200, { 'Content-Type': 'text/html' });
                             res.write('error');
@@ -262,7 +262,7 @@ app.get('/posts',function(req,res){
                 ret(res, "error");
                 return console.error("db connect err", err);
             }
-            client.query("SELECT title,content,author,pos,lon,lat,alt,time FROM posts WHERE status='display' ORDER BY time DESC LIMIT 20;", function (err, result) {
+            client.query("SELECT title,content,nick,pos,lon,lat,alt,time FROM posts WHERE status='display' ORDER BY time DESC LIMIT 20;", function (err, result) {
 				if (err) {
                 	ret(res, "error");
                 	return console.error("db connect err", err);
@@ -289,12 +289,18 @@ app.post('/post',function(req,res){
                 ret(res,'checkerr');
                 return console.log("checkerr");
             }
-            client.query("INSERT INTO posts (title,content,author,pos,lon,lat,etime,time,status) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)",[xss(req.body.title),xss(req.body.content),xss(req.session.u),xss(req.body.pos),req.body.lon,req.body.lat,parseInt(req.body.etime),Date.now(),"display"], function (err, result) {
-				if (err) {
-                	ret(res, "error");
-                	return console.error("db connect err", err);
-            	}
-				ret(res,"ok");
+            client.query("SELECT * FROM users WHERE uid=$1",[req.session.uid],function(err,result){
+                if(err){
+                    ret(res,"error");
+                    return console.error("db query err",err);
+                }  
+            	client.query("INSERT INTO posts (title,content,author,pos,lon,lat,etime,time,status,nick) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)",[xss(req.body.title),xss(req.body.content),xss(req.session.u),xss(req.body.pos),req.body.lon,req.body.lat,parseInt(req.body.etime),Date.now(),"display",result.rows[0].nick], function (err, result2) {
+					if (err) {
+                		ret(res, "error");
+                		return console.error("db connect err", err);
+            		}
+					ret(res,"ok");
+				});
 			});
 		done();
 		});
