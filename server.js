@@ -311,19 +311,19 @@ app.post('/post',function(req,res){
 });
 
 app.get('/userlist',function(req,res){
-    if(req.session.u!=null)
+    if(req.session.uid!=null)
     {
         pool.connect(function(err,client,done){
             if(err){
                 ret(res,'error');
                 return console.error("db connect err",err);
             }
-            client.query("SELECT * FROM users WHERE username=$1 AND type=$2",[xss(req.session.u),'su'],function(err,result){
+            client.query("SELECT * FROM users WHERE uid=$1",[req.session.uid],function(err,result){
                 if(err){
                     ret(res,"error");
                     return console.error("db query err",err);
                 }  
-                if(result.rows[0]==null){
+                if(result.rows[0]==null||(result.rows[0].type!="admin"&&result.rows[0].type!="su")){
                     res.writeHead(200, {'Content-Type': 'text/html'});	
          			res.write('fobidden');		
       				res.end();
