@@ -102,6 +102,7 @@ app.post('/login',function(req,res){
       				res.end();
 				}else if(md5(req.body.p)==result.rows[0].password){
 					req.session.u=req.body.u;
+					req.session.uid=result.rows[0].uid;
 					req.session.user={'username':req.body.u};
          			res.writeHead(200, {'Content-Type': 'text/html'});	
          			res.write('ok');		
@@ -168,6 +169,7 @@ app.post('/passwd',function(req,res){
 
 app.post('/logout',function(req,res){
 	req.session.u=null;
+	req.session.uid=null;
 	res.writeHead(200, {'Content-Type': 'text/html'});	
     res.write('ok');		
     res.end();
@@ -213,18 +215,38 @@ app.get('/info',function(req,res){
 	ret(res,JSON.stringify({"username":req.session.u}));
 });
 app.get('/infos',function(req,res){
-	if(req.session.u!=null){
+	if(req.session.uid!=null){
 		pool.connect(function (err,client,done) {
             if (err) {
                 ret(res, "error");
                 return console.error("db connect err", err);
             }
-            client.query("SELECT uid,username,phone,register_time,email,type,nick FROM users WHERE username=$1;",[xss(req.session.u)], function (err, result) {
+            client.query("SELECT uid,username,phone,register_time,email,type,nick FROM users WHERE uid=$1;",[req.session.uid], function (err, result) {
 				if (err) {
                 	ret(res, "error");
                 	return console.error("db connect err", err);
             	}
 			ret(res,JSON.stringify(result.rows[0]));
+			});
+		done();
+		});
+	}else{
+	ret(res,"NotLogined");
+	}
+});
+app.post('/infos',function(req,res){
+	if(req.session.uid!=null){
+		pool.connect(function (err,client,done) {
+            if (err) {
+                ret(res, "error");
+                return console.error("db connect err", err);
+            }
+            client.query("UPDATE users SET nick=$1,email=$2 WHERE uid=$3;",[xss(req.body.nick),xss(req.body.email),req.session.uid], function (err, result) {
+				if (err) {
+                	ret(res, "error");
+                	return console.error("db connect err", err);
+            	}
+			ret(res,"ok");
 			});
 		done();
 		});
@@ -367,3 +389,4 @@ app.post('/changetype',function(req,res){
         ret(res,'NotLogined');
     }
 });
+
