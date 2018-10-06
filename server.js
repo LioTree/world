@@ -244,7 +244,7 @@ app.get('/posts',function(req,res){
 				if (err) {
                 	ret(res, "error");
                 	return console.error("db connect err", err);
-            	}
+            	} 
 				ret(res,JSON.stringify(result.rows));
 			});
 		done();
@@ -254,6 +254,27 @@ app.get('/posts',function(req,res){
 	}
 });
 
+app.post('/search_post',function(req,res){
+    if(req.session.u!=null){
+        pool.connect(function(err,client,done){
+            if(err){
+                ret(res,'error');
+                return console.error("db connect err",err);
+            }
+            client.query("SELECT * FROM posts WHERE lon=$1 AND lat=$2;",[xss(req.body.lon),xss(req.body.lat)],function(err,result){
+                if(err){
+                    ret(res,"error");
+                }
+                else{
+                    ret(res,JSON.stringify(result.rows));  
+                }
+            });
+        });
+    }
+    else{
+        ret(res,"NotLogined");
+    }
+});
 
 app.post('/post',function(req,res){
 	if(req.session.u!=null){
@@ -262,7 +283,7 @@ app.post('/post',function(req,res){
                 ret(res, "error");
                 return console.error("db connect err", err);
             }
-            if(req.body.content.length >5000 || req.body.title.length>100 || req.body.pos>100 || req.body.lon>=180 || req.body.lon<=(-180) || req.body.lat>=90 || req.body.lat<=(-90) )
+            if(req.body.content.length >5000 || req.body.title.length>100 || req.body.pos.length>100 || req.body.lon>=180 || req.body.lon<=(-180) || req.body.lat>=90 || req.body.lat<=(-90) )
             {
                 ret(res,'checkerr');
                 return console.log("checkerr");
