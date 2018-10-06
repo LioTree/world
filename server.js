@@ -289,7 +289,7 @@ app.post('/post',function(req,res){
                 ret(res,'checkerr');
                 return console.log("checkerr");
             }
-            client.query("INSERT INTO posts (title,content,author,pos,lon,lat,alt,time,status) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)",[xss(req.body.title),xss(req.body.content),xss(req.session.u),xss(req.body.pos),req.body.lon,req.body.lat,req.body.alt,Date.now(),"display"], function (err, result) {
+            client.query("INSERT INTO posts (title,content,author,pos,lon,lat,etime,time,status) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)",[xss(req.body.title),xss(req.body.content),xss(req.session.u),xss(req.body.pos),req.body.lon,req.body.lat,req.body.etime,Date.now(),"display"], function (err, result) {
 				if (err) {
                 	ret(res, "error");
                 	return console.error("db connect err", err);
