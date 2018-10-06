@@ -124,14 +124,14 @@ app.post('/login',function(req,res){
 
 
 app.post('/passwd',function(req,res){
-    if(req.session.u!=null&&req.body.u!=null&&req.body.p!=null&&req.body.u==req.session.u&&req.body.np!=null)
+    if(req.session.uid!=null&&req.body.p!=null&&req.body.np!=null)
     {
         pool.connect(function(err,client,done){
             if(err){
                 ret(res,'error');
                 return console.error("db connnet err",err);
             }
-            client.query("SELECT * FROM users WHERE username=$1",[xss(req.body.u)],function(err,result)
+            client.query("SELECT * FROM users WHERE uid=$1",[req.session.uid],function(err,result)
             {
                 if(err)
                 {
@@ -140,11 +140,11 @@ app.post('/passwd',function(req,res){
                 }
                 if(result.rows[0]==null){
 					res.writeHead(200, {'Content-Type': 'text/html'});	
-         			res.write('upwerr');		
+         			res.write('pwerr');		
                       res.end();
                 }
                 else if(md5(req.body.p)==result.rows[0].password){
-                    client.query("UPDATE users SET password=$1 where username=$2",[md5(req.body.np),xss(req.body.u)],function(err,result){
+                    client.query("UPDATE users SET password=$1 where uid=$2",[md5(req.body.np),req.session.uid],function(err,result){
                         if(err){
                             ret(res,"error");
                             return console.error("db update err",err);
@@ -154,7 +154,7 @@ app.post('/passwd',function(req,res){
                 }
                 else{
                     res.writeHead(200, {'Content-Type': 'text/html'});	
-         			res.write('upwerr');		
+         			res.write('pwerr');		
       				res.end();
                 }
             });
