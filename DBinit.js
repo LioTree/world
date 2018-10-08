@@ -33,7 +33,7 @@ pool.connect(function(err, client, done) {
 				isBaned VARCHAR(10),\
 				password VARCHAR(256)\
 				);\n\
-				INSERT INTO users (username,password,type) VALUES (\'admin\',\''+pw+'\',\'su\');', function(err, result) {
+				INSERT INTO users (username,password,type,nick) VALUES (\'admin\',\''+pw+'\',\'su\',\'站长\');', function(err, result) {
     done();
     if(err) {
       return console.error('queryerr', err);
