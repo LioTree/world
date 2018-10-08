@@ -44,14 +44,16 @@
         function posts(p){
         nd=new Date();
         nd.setTime(p.time);
+	ndd=new Date();
+	ndd.setTime(p.etime);
         return '<div class="panel panel-default" onclick=find('+p.lon+','+p.lat+')>\
         <div class="panel-heading">\
-        <p><strong>标题：'+p.title+'</strong><small  class="pull-right">作者:'+p.nick+'</small></p>\
+        <p>时间:'+ndd.toLocaleString()+'<strong>标题：'+p.title+'</strong><small  class="pull-right">作者:'+p.nick+'</small></p>\
         </div>\
         <div class="panel-body"><div>'+p.content.replace(/\n/g,"<br>")+'</div>\
         </div>\
         <div class="panel-footer">\
-        <p>地点:'+p.pos+' 经度:'+p.lon+' 纬度:'+p.lat+'<small class="pull-right">'+nd.toLocaleString()+'</small></p>\
+        <p>地点:'+p.pos+' 经度:'+p.lon+' 纬度:'+p.lat+'<small class="pull-right">发表时间:'+nd.toLocaleString()+'</small></p>\
         </div>\
         </div>\
         '
