@@ -240,13 +240,20 @@ app.get('/posts',function(req,res){
                 ret(res, "error");
                 return console.error("db connect err", err);
             }
-            client.query("SELECT id,title,content,nick,pos,lon,lat,etime,time FROM posts WHERE status='display' ORDER BY time DESC LIMIT 20;", function (err, result) {
+            if(req.query.lon==null||req.query.lat==null)client.query("SELECT id,title,content,nick,pos,lon,lat,etime,time FROM posts WHERE status='display' ORDER BY time DESC LIMIT 50;", function (err, result) {
 				if (err) {
                 	ret(res, "error");
                 	return console.error("db connect err", err);
-            	} 
+            		} 
 				ret(res,JSON.stringify(result.rows));
-			});
+		});
+	else client.query("SELECT id,title,content,nick,pos,lon,lat,etime,time FROM posts WHERE status='display' AND ABS(lon-$1)<5 AND ABS(lat-$2)<5 ORDER BY time DESC LIMIT 50;",[req.query.lon,req.query.lat], function (err, result) {
+				if (err) {
+                	ret(res, "error");
+                	return console.error("db connect err", err);
+            		} 
+				ret(res,JSON.stringify(result.rows));
+		});
 		done();
 		});
 	}else{
@@ -254,27 +261,7 @@ app.get('/posts',function(req,res){
 	}
 });
 
-app.post('/search_post',function(req,res){
-    if(req.session.uid!=null){
-        pool.connect(function(err,client,done){
-            if(err){
-                ret(res,'error');
-                return console.error("db connect err",err);
-            }
-            client.query("SELECT * FROM posts WHERE lon=$1 AND lat=$2;",[xss(req.body.lon),xss(req.body.lat)],function(err,result){
-                if(err){
-                    ret(res,"error");
-                }
-                else{
-                    ret(res,JSON.stringify(result.rows));  
-                }
-            });
-        });
-    }
-    else{
-        ret(res,"NotLogined");
-    }
-});
+
 
 app.post('/post',function(req,res){
 	if(req.session.u!=null){
