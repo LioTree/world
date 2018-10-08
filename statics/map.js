@@ -28,3 +28,11 @@ function mclear(){
 	mp.clearOverlays();
 }
 
+function find(lon,lat){
+	/*
+	alert(lon);
+	alert(lat);
+	*/
+	var point = new BMap.Point(lon, lat);  // 创建点坐标  
+    mp.centerAndZoom(point, 15);                 // 初始化地图，设置中心点坐标和地图级别
+}
