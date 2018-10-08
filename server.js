@@ -240,7 +240,9 @@ app.get('/posts',function(req,res){
                 ret(res, "error");
                 return console.error("db connect err", err);
             }
-            client.query("SELECT title,content,author,pos,lon,lat,alt,time FROM posts WHERE status='display' ORDER BY time DESC LIMIT 20;", function (err, result) {
+
+            client.query("SELECT id,title,content,nick,pos,lon,lat,alt,time FROM posts WHERE status='display' ORDER BY time DESC LIMIT 20;", function (err, result) {
+
 				if (err) {
                 	ret(res, "error");
                 	return console.error("db connect err", err);
