@@ -102,7 +102,6 @@ app.post('/login',function(req,res){
       				res.end();
 				}else if(md5(req.body.p)==result.rows[0].password){
 					req.session.u=req.body.u;
-					req.session.uid=result.rows[0].uid;
 					req.session.user={'username':req.body.u};
          			res.writeHead(200, {'Content-Type': 'text/html'});	
          			res.write('ok');		
@@ -124,14 +123,14 @@ app.post('/login',function(req,res){
 
 
 app.post('/passwd',function(req,res){
-    if(req.session.uid!=null&&req.body.p!=null&&req.body.np!=null)
+    if(req.session.u!=null&&req.body.u!=null&&req.body.p!=null&&req.body.u==req.session.u&&req.body.np!=null)
     {
         pool.connect(function(err,client,done){
             if(err){
                 ret(res,'error');
                 return console.error("db connnet err",err);
             }
-            client.query("SELECT * FROM users WHERE uid=$1",[req.session.uid],function(err,result)
+            client.query("SELECT * FROM users WHERE username=$1",[xss(req.body.u)],function(err,result)
             {
                 if(err)
                 {
@@ -140,11 +139,11 @@ app.post('/passwd',function(req,res){
                 }
                 if(result.rows[0]==null){
 					res.writeHead(200, {'Content-Type': 'text/html'});	
-         			res.write('pwerr');		
+         			res.write('upwerr');		
                       res.end();
                 }
                 else if(md5(req.body.p)==result.rows[0].password){
-                    client.query("UPDATE users SET password=$1 where uid=$2",[md5(req.body.np),req.session.uid],function(err,result){
+                    client.query("UPDATE users SET password=$1 where username=$2",[md5(req.body.np),xss(req.body.u)],function(err,result){
                         if(err){
                             ret(res,"error");
                             return console.error("db update err",err);
@@ -154,7 +153,7 @@ app.post('/passwd',function(req,res){
                 }
                 else{
                     res.writeHead(200, {'Content-Type': 'text/html'});	
-         			res.write('pwerr');		
+         			res.write('upwerr');		
       				res.end();
                 }
             });
@@ -169,7 +168,6 @@ app.post('/passwd',function(req,res){
 
 app.post('/logout',function(req,res){
 	req.session.u=null;
-	req.session.uid=null;
 	res.writeHead(200, {'Content-Type': 'text/html'});	
     res.write('ok');		
     res.end();
@@ -192,7 +190,7 @@ app.post('/register', function (req, res) {
                     ret(res,"exist");
                 }
                 else {
-                    client.query("INSERT INTO users (username,password,register_time,register_ip,type,nick) values ($1,$2,$3,$4,$5,$6);", [xss(req.body.u),md5(req.body.p),Date.now(),getip(req),'normal',"匿名用户"], function (err, result) {
+                    client.query("INSERT INTO users (username,password,register_time,register_ip,type) values ($1,$2,$3,$4,$5);", [xss(req.body.u),md5(req.body.p),Date.now(),getip(req),'normal'], function (err, result) {
                         if (err) {
                             res.writeHead(200, { 'Content-Type': 'text/html' });
                             res.write('error');
@@ -215,38 +213,18 @@ app.get('/info',function(req,res){
 	ret(res,JSON.stringify({"username":req.session.u}));
 });
 app.get('/infos',function(req,res){
-	if(req.session.uid!=null){
+	if(req.session.u!=null){
 		pool.connect(function (err,client,done) {
             if (err) {
                 ret(res, "error");
                 return console.error("db connect err", err);
             }
-            client.query("SELECT uid,username,phone,register_time,email,type,nick FROM users WHERE uid=$1;",[req.session.uid], function (err, result) {
+            client.query("SELECT uid,username,phone,register_time,email,type,nick FROM users WHERE username=$1;",[xss(req.session.u)], function (err, result) {
 				if (err) {
                 	ret(res, "error");
                 	return console.error("db connect err", err);
             	}
 			ret(res,JSON.stringify(result.rows[0]));
-			});
-		done();
-		});
-	}else{
-	ret(res,"NotLogined");
-	}
-});
-app.post('/infos',function(req,res){
-	if(req.session.uid!=null){
-		pool.connect(function (err,client,done) {
-            if (err) {
-                ret(res, "error");
-                return console.error("db connect err", err);
-            }
-            client.query("UPDATE users SET nick=$1,email=$2 WHERE uid=$3;",[xss(req.body.nick),xss(req.body.email),req.session.uid], function (err, result) {
-				if (err) {
-                	ret(res, "error");
-                	return console.error("db connect err", err);
-            	}
-			ret(res,"ok");
 			});
 		done();
 		});
@@ -266,7 +244,7 @@ app.get('/posts',function(req,res){
 				if (err) {
                 	ret(res, "error");
                 	return console.error("db connect err", err);
-            	}
+            	} 
 				ret(res,JSON.stringify(result.rows));
 			});
 		done();
@@ -276,6 +254,27 @@ app.get('/posts',function(req,res){
 	}
 });
 
+app.post('/search_post',function(req,res){
+    if(req.session.u!=null){
+        pool.connect(function(err,client,done){
+            if(err){
+                ret(res,'error');
+                return console.error("db connect err",err);
+            }
+            client.query("SELECT * FROM posts WHERE lon=$1 AND lat=$2;",[xss(req.body.lon),xss(req.body.lat)],function(err,result){
+                if(err){
+                    ret(res,"error");
+                }
+                else{
+                    ret(res,JSON.stringify(result.rows));  
+                }
+            });
+        });
+    }
+    else{
+        ret(res,"NotLogined");
+    }
+});
 
 app.post('/post',function(req,res){
 	if(req.session.u!=null){
@@ -289,18 +288,12 @@ app.post('/post',function(req,res){
                 ret(res,'checkerr');
                 return console.log("checkerr");
             }
-            client.query("SELECT * FROM users WHERE uid=$1",[req.session.uid],function(err,result){
-                if(err){
-                    ret(res,"error");
-                    return console.error("db query err",err);
-                }  
-            	client.query("INSERT INTO posts (title,content,author,pos,lon,lat,etime,time,status,nick) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)",[xss(req.body.title),xss(req.body.content),xss(req.session.u),xss(req.body.pos),req.body.lon,req.body.lat,parseInt(req.body.etime),Date.now(),"display",result.rows[0].nick], function (err, result2) {
-					if (err) {
-                		ret(res, "error");
-                		return console.error("db connect err", err);
-            		}
-					ret(res,"ok");
-				});
+            client.query("INSERT INTO posts (title,content,author,pos,lon,lat,alt,time,status) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)",[xss(req.body.title),xss(req.body.content),xss(req.session.u),xss(req.body.pos),req.body.lon,req.body.lat,req.body.alt,Date.now(),"display"], function (err, result) {
+				if (err) {
+                	ret(res, "error");
+                	return console.error("db connect err", err);
+            	}
+				ret(res,"ok");
 			});
 		done();
 		});
@@ -311,19 +304,19 @@ app.post('/post',function(req,res){
 });
 
 app.get('/userlist',function(req,res){
-    if(req.session.uid!=null)
+    if(req.session.u!=null)
     {
         pool.connect(function(err,client,done){
             if(err){
                 ret(res,'error');
                 return console.error("db connect err",err);
             }
-            client.query("SELECT * FROM users WHERE uid=$1",[req.session.uid],function(err,result){
+            client.query("SELECT * FROM users WHERE username=$1 AND type=$2",[xss(req.session.u),'su'],function(err,result){
                 if(err){
                     ret(res,"error");
                     return console.error("db query err",err);
                 }  
-                if(result.rows[0]==null||(result.rows[0].type!="admin"&&result.rows[0].type!="su")){
+                if(result.rows[0]==null){
                     res.writeHead(200, {'Content-Type': 'text/html'});	
          			res.write('fobidden');		
       				res.end();
@@ -395,4 +388,3 @@ app.post('/changetype',function(req,res){
         ret(res,'NotLogined');
     }
 });
-

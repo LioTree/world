@@ -44,7 +44,7 @@
         function posts(p){
         nd=new Date();
         nd.setTime(p.time);
-        return '<div class="panel panel-default">\
+        return '<div class="panel panel-default" onclick=find('+p.lon+','+p.lat+')>\
         <div class="panel-heading">\
         <p><strong>标题：'+p.title+'</strong><small  class="pull-right">作者:'+p.nick+'</small></p>\
         </div>\
