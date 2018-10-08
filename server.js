@@ -255,7 +255,7 @@ app.get('/posts',function(req,res){
 });
 
 app.post('/search_post',function(req,res){
-    if(req.session.u!=null){
+    if(req.session.uid!=null){
         pool.connect(function(err,client,done){
             if(err){
                 ret(res,'error');
