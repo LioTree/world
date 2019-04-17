@@ -1,2 +1,2 @@
 # world
-The WORLD
+在地图上留下你的足迹
